@@ -8,11 +8,15 @@
 
   <ItemGroup>
     <Reference Include="Irony">
-      <HintPath>..\..\..\..\..\..\..\Compi2\net40\Irony.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\compiladores 2\net40\Irony.dll</HintPath>
     </Reference>
     <Reference Include="Irony.Interpreter">
-      <HintPath>..\..\..\..\..\..\..\Compi2\net40\Irony.Interpreter.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\compiladores 2\net40\Irony.Interpreter.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Tarductor\" />
   </ItemGroup>
 
 </Project>
