@@ -4,6 +4,7 @@ using System.Text;
 using Irony.Parsing;
 using System.Linq;
 using Proyecto1.Ejecutor.Analizador.Interfaces;
+using Proyecto1.Ejecutor.Modelos;
 
 namespace Proyecto1.Ejecutor.Analizador
 {
@@ -32,6 +33,26 @@ namespace Proyecto1.Ejecutor.Analizador
             if (raiz != null && arbol.ParserMessages.Count == 0)
             {
                 LinkedList<Instruccion> arbol_AST = Instrucciones(raiz.ChildNodes.ElementAt(0));
+                TablaDeSimbolos tabla_global = new TablaDeSimbolos();
+                if (arbol_AST != null)
+                {
+                    foreach (Instruccion inst in arbol_AST)
+                    {
+                        inst.Agrupar(tabla_global);
+                    }
+                    foreach (Instruccion inst in arbol_AST)
+                    {
+                        if (inst.getTipo() == Tipo.END)
+                        {
+                         
+                        }
+                    }
+
+                }
+            }
+            else
+            {
+               
             }
 
             return null;
@@ -61,7 +82,7 @@ namespace Proyecto1.Ejecutor.Analizador
             switch (produccion)
             {
                 case "Pprogram":
-                    return null;
+                    return PPROGRAM(node.ChildNodes.ElementAt(0)); ;
                 case "Declaracion":
                     return null;
                 case "Ptype":
@@ -73,5 +94,9 @@ namespace Proyecto1.Ejecutor.Analizador
             return null;
         }
 
+        private Instruccion PPROGRAM(ParseTreeNode nodo) {
+
+            return null;
+        }
     }
 }
