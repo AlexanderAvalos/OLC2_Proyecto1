@@ -18,7 +18,8 @@ namespace Proyecto1
     public partial class Form1 : Form
     {
 
-        Gramatica_Ejecutar ejecutar = new Gramatica_Ejecutar();
+
+        List<string> salida = new List<string>();
         public Form1()
         {
             InitializeComponent();
@@ -36,7 +37,15 @@ namespace Proyecto1
 
         private void button3_Click(object sender, EventArgs e)
         {
+            ejecutar();
+        }
 
+        private void ejecutar() {
+            
+            Sintactico_ejecutar sintactico = new Sintactico_ejecutar();
+            string entrada = richTextBox1.Text.Trim();
+            richTextBox2.AppendText(entrada);
+            sintactico.Analizar(entrada,new Gramatica_Ejecutar());
         }
 
         private void Abrir()
@@ -58,6 +67,17 @@ namespace Proyecto1
         private void Form1_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            string entrada = richTextBox1.Text.Trim();
+            richTextBox2.AppendText(entrada);
         }
     }
 }

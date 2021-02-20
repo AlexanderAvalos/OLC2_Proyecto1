@@ -8,7 +8,5 @@ namespace Proyecto1.Ejecutor.Analizador.Interfaces
     public interface Instruccion
     {
         Object Ejecutar(TablaDeSimbolos tabla);
-        Object Agrupar(TablaDeSimbolos tabla);
-        Tipo getTipo();
     }
 }

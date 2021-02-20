@@ -49,11 +49,11 @@ namespace Proyecto1.Ejecutor.Analizador
                 SCOMA = ToTerm(","),
                 SDOSPUNTOS = ToTerm(":"),
                 SIGUALAR = ToTerm(":="),
-                //logicos
+                //logicos reservadas
                 LAND = ToTerm("and"),
                 LOR = ToTerm("or"),
                 LNOT = ToTerm("not"),
-                //tipos y valores
+                //tipos y valores Reservadas
                 VTRUE = ToTerm("true"),
                 VFALSE = ToTerm("false"),
                 VINTEGER = ToTerm("integer"),
@@ -92,7 +92,7 @@ namespace Proyecto1.Ejecutor.Analizador
                 Instrucciones = new NonTerminal("Instrucciones"),
                 Instruccion = new NonTerminal("Instruccion"),
                 //instruccion
-                Declaracion = new NonTerminal("Declaracion"),
+                PDeclaracion = new NonTerminal("Declaracion"),
                 Pprogram = new NonTerminal("Pprogram"),
                 Ptype = new NonTerminal("Ptype"),
                 Funcion = new NonTerminal("Funcion"),
@@ -117,21 +117,17 @@ namespace Proyecto1.Ejecutor.Analizador
             #region Gramatica
             //-----------
             S.Rule = Instrucciones;
-            S.ErrorRule = SyntaxError + SPYCOMA;
             //---------
             Instrucciones.Rule = Instrucciones + Instruccion
                 | Instruccion
                 | Empty;
             //----------
             Instruccion.Rule = Pprogram
-                | Declaracion
-                | Ptype
-                | Funcion;
-            Instruccion.ErrorRule = SyntaxError + Instruccion;
+                | PDeclaracion;
             //-------
             Pprogram.Rule = RPROGRAM + ID + SPYCOMA;
             //-------
-            Declaracion.Rule = RCONST + ID + SIGUAL + Operacion_relacional + SPYCOMA
+            PDeclaracion.Rule = RCONST + ID + SIGUAL + Operacion_relacional + SPYCOMA
                 |RVAR + SDOSPUNTOS + Tipo + Declaraciones + SPYCOMA;
 
             Declaraciones.Rule = SIGUAL + Operacion_relacional + SPYCOMA
@@ -141,8 +137,8 @@ namespace Proyecto1.Ejecutor.Analizador
 
             Objeto.Rule = Decla + Declaraciones2 + REND + SPYCOMA;
 
-            Declaraciones2.Rule = Declaraciones2 + SCOMA + Declaracion
-                | Declaracion;
+            Declaraciones2.Rule = Declaraciones2 + SCOMA + PDeclaracion
+                | PDeclaracion;
 
             Decla.Rule = ID + SIGUAL + ROBJECT + SPYCOMA;
             //--------------
@@ -164,7 +160,6 @@ namespace Proyecto1.Ejecutor.Analizador
                 | Operacion_numerica + SMULTIPLICACION + Operacion_numerica
                 | SPARIZQ + Operacion + SPARDER
                 | ID + SPARIZQ + SPARDER
-                | ID + SPARIZQ + Valores + SPARDER
                 | Valor;
             //-----------
             Tipo.Rule = VINTEGER
@@ -181,7 +176,31 @@ namespace Proyecto1.Ejecutor.Analizador
                 | VFALSE
                 | VTRUE;
 
+
+            this.Root = S;
             #endregion
+            #region Preferencias
+            String[] reservadas = {
+                RPROGRAM.Text,
+                RVAR.Text,
+                RTYPE.Text,
+                REND.Text,
+                ROBJECT.Text,
+                RCONST.Text,
+                VTRUE.Text,
+                VFALSE.Text,
+                VINTEGER.Text,
+                VREAL.Text,
+                VBOOLEAN.Text,
+                VVOID.Text,
+                VSTRING.Text,
+                LAND.Text,
+                LOR.Text,
+            };
+            MarkReservedWords(reservadas); 
+            #endregion
+
+
         }
     }
 }

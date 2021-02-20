@@ -16,7 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Ejecutor\Instrucciones\" />
     <Folder Include="Tarductor\" />
   </ItemGroup>
 
