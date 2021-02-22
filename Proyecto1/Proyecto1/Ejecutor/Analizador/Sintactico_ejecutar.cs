@@ -21,7 +21,7 @@ namespace Proyecto1.Ejecutor.Analizador
         bool aux_global = true;
         public List<string> salida = new List<string>();
         List<string> lst_ids = new List<string>();
-  
+
         public ParseTreeNode Analizar(string entrada, Grammar gramatica)
         {
             LanguageData lenguaje = new LanguageData(gramatica);
@@ -55,7 +55,8 @@ namespace Proyecto1.Ejecutor.Analizador
                     inst.Ejecutar(global);
                 }
             }
-            else {
+            else
+            {
                 Console.WriteLine("No viene la instruccion Program");
             }
         }
@@ -106,7 +107,7 @@ namespace Proyecto1.Ejecutor.Analizador
                 case "Declaracion":
                     return DECLARACION(node.ChildNodes.ElementAt(0));
                 case "Ptype":
-                    return null;
+                    return DECLARACION(node.ChildNodes.ElementAt(0));
                 case "Funcion":
                     return null;
             }
@@ -128,27 +129,63 @@ namespace Proyecto1.Ejecutor.Analizador
             if (nodo.ChildNodes.Count == 5)
             {
                 string nombre = nodo.ChildNodes.ElementAt(0).Term.Name;
-                if (nombre.ToLower() == "const")
+                if (nombre.ToLower() == "var")
+                {
+                    Tipo obtener = BuscarTipo(nodo.ChildNodes.ElementAt(3));
+                    string produccion = nodo.ChildNodes.ElementAt(1).Term.Name;
+                    if (produccion == "Pids") {
+                        return new Declaracion(PIDS(nodo.ChildNodes.ElementAt(1)), obtener);
+                    }
+                }
+                else if (nombre.ToLower() == "const")
                 {
 
                 }
-                else if (nombre.ToLower() == "var")
-                {
 
-                }
             }
 
             return null;
         }
-        private Instruccion PTYPE(ParseTreeNode nodo)
-        {
-            return null;
-        }
-        private Instruccion FUNCION(ParseTreeNode nodo)
-        {
+
+        private Instruccion PTYPE(ParseTreeNode nodo) {
             return null;
         }
 
+        private Tipo BuscarTipo(ParseTreeNode nodo) {
+            string tipo = nodo.Term.Name;
+            switch (tipo.ToLower())
+            {
+                case "integer":
+                    return Tipo.INTEGER;
+                case "real":
+                    return Tipo.REAL;
+                case "boolean":
+                    return Tipo.BOOLEAN;
+                case "string":
+                    return Tipo.STRING;
+                case "id":
+                    return Tipo.ID;
+                case "object":
+                    return Tipo.OBJECT;
+            }
+            return Tipo.NOENCONTRADO;
+        }
+        private LinkedList<string> PIDS(ParseTreeNode nodo) {
+            if (nodo.ChildNodes.Count == 3)
+            {
+                LinkedList<string> lst = PIDS(nodo.ChildNodes.ElementAt(0));
+                lst.AddLast(nodo.ChildNodes.ElementAt(2).Term.Name);
+                return lst;
+            }
+            else {
+                LinkedList<string> lst = new LinkedList<string>();
+                lst.AddLast(nodo.ChildNodes.ElementAt(0).Term.Name);
+                return lst;
+                
+            }
+        }
+
+   
 
     }
 }

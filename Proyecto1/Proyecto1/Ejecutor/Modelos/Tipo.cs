@@ -6,6 +6,7 @@ namespace Proyecto1.Ejecutor.Modelos
 {
     public enum Tipo
     {
+        ID,
         IGUAL,
         PYCOMA,
         DPUNTOS,

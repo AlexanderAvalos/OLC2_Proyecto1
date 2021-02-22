@@ -43,11 +43,11 @@ namespace Proyecto1.Ejecutor.Analizador
                 SMAYORIGUAL = ToTerm(">="),
                 SMENORIGUAL = ToTerm("<="),
                 SDIFERENTE = ToTerm("<>"),
-                //
-                SPUNTO = ToTerm("."),
+                 //
                 SPYCOMA = ToTerm(";"),
                 SCOMA = ToTerm(","),
                 SDOSPUNTOS = ToTerm(":"),
+                SPUNTO = ToTerm("."),
                 SIGUALAR = ToTerm(":="),
                 //logicos reservadas
                 LAND = ToTerm("and"),
@@ -64,14 +64,14 @@ namespace Proyecto1.Ejecutor.Analizador
                 //reservadas
                 RVAR = ToTerm("var"),
                 RTYPE = ToTerm("type"),
-                RBEGIN = ToTerm("begin"),
                 REND = ToTerm("end"),
                 RPROGRAM = ToTerm("program"),
                 ROBJECT = ToTerm("object"),
+                RCONST = ToTerm("const"),
+                RBEGIN = ToTerm("begin"),
                 RARRAY = ToTerm("array"),
                 ROF = ToTerm("of"),
                 RIF = ToTerm("if"),
-                RCONST = ToTerm("const"),
                 RTHEN = ToTerm("then"),
                 RELSE = ToTerm("else"),
                 RCASE = ToTerm("case"),
@@ -92,14 +92,14 @@ namespace Proyecto1.Ejecutor.Analizador
                 Instrucciones = new NonTerminal("Instrucciones"),
                 Instruccion = new NonTerminal("Instruccion"),
                 //instruccion
-                PDeclaracion = new NonTerminal("Declaracion"),
+                PDeclaracion = new NonTerminal("PDeclaracion"),
                 Pprogram = new NonTerminal("Pprogram"),
                 Ptype = new NonTerminal("Ptype"),
-                Funcion = new NonTerminal("Funcion"),
                 //declaracion
                 Operacion_relacional = new NonTerminal("Operacion_relacional"),
                 Tipo = new NonTerminal("Tipo"),
                 Declaraciones = new NonTerminal("Declaraciones"),
+                Pids = new NonTerminal("Pids"),
                 //Ptype
                 Objeto = new NonTerminal("Objeto"),
                 //objeto 
@@ -109,8 +109,7 @@ namespace Proyecto1.Ejecutor.Analizador
                 Operacion_numerica = new NonTerminal("Operacion_Numerica"),
                 //operacion_numerica
                 Operacion = new NonTerminal("Operacion"),
-                Valor = new NonTerminal("Valor"),
-                Valores = new NonTerminal("Valores")
+                Valor = new NonTerminal("Valor")
                 ;
             #endregion
 
@@ -128,10 +127,13 @@ namespace Proyecto1.Ejecutor.Analizador
             Pprogram.Rule = RPROGRAM + ID + SPYCOMA;
             //-------
             PDeclaracion.Rule = RCONST + ID + SIGUAL + Operacion_relacional + SPYCOMA
-                |RVAR + SDOSPUNTOS + Tipo + Declaraciones + SPYCOMA;
+                | RVAR + Pids + SDOSPUNTOS + Tipo + Declaraciones;
 
             Declaraciones.Rule = SIGUAL + Operacion_relacional + SPYCOMA
                 | SPYCOMA;
+
+            Pids.Rule = Pids + SCOMA + ID
+                | ID;
             //----------------------
             Ptype.Rule = RTYPE + Objeto;
 
@@ -197,7 +199,7 @@ namespace Proyecto1.Ejecutor.Analizador
                 LAND.Text,
                 LOR.Text,
             };
-            MarkReservedWords(reservadas); 
+            MarkReservedWords(reservadas);
             #endregion
 
 

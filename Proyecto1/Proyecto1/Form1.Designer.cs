@@ -29,8 +29,8 @@ namespace Proyecto1
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.richTextBox2 = new System.Windows.Forms.RichTextBox();
             this.Cargar = new System.Windows.Forms.Button();
@@ -67,15 +67,11 @@ namespace Proyecto1
             this.searchToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
-            // 
-            // richTextBox1
-            // 
-            this.richTextBox1.Location = new System.Drawing.Point(12, 33);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(311, 349);
-            this.richTextBox1.TabIndex = 0;
-            this.richTextBox1.Text = "";
             // 
             // label1
             // 
@@ -99,9 +95,9 @@ namespace Proyecto1
             // 
             // Cargar
             // 
-            this.Cargar.Location = new System.Drawing.Point(329, 33);
+            this.Cargar.Location = new System.Drawing.Point(428, 33);
             this.Cargar.Name = "Cargar";
-            this.Cargar.Size = new System.Drawing.Size(205, 35);
+            this.Cargar.Size = new System.Drawing.Size(106, 35);
             this.Cargar.TabIndex = 5;
             this.Cargar.Text = "Cargar Archivo";
             this.Cargar.UseVisualStyleBackColor = true;
@@ -109,9 +105,9 @@ namespace Proyecto1
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(329, 74);
+            this.button2.Location = new System.Drawing.Point(428, 74);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(205, 35);
+            this.button2.Size = new System.Drawing.Size(106, 35);
             this.button2.TabIndex = 6;
             this.button2.Text = "Traducir";
             this.button2.UseVisualStyleBackColor = true;
@@ -119,9 +115,9 @@ namespace Proyecto1
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(329, 115);
+            this.button3.Location = new System.Drawing.Point(428, 115);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(205, 35);
+            this.button3.Size = new System.Drawing.Size(106, 35);
             this.button3.TabIndex = 7;
             this.button3.Text = "Ejecutar";
             this.button3.UseVisualStyleBackColor = true;
@@ -129,9 +125,9 @@ namespace Proyecto1
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(329, 156);
+            this.button5.Location = new System.Drawing.Point(428, 156);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(205, 35);
+            this.button5.Size = new System.Drawing.Size(106, 35);
             this.button5.TabIndex = 9;
             this.button5.Text = "Reportes";
             this.button5.UseVisualStyleBackColor = true;
@@ -359,11 +355,35 @@ namespace Proyecto1
             this.aboutToolStripMenuItem1.Size = new System.Drawing.Size(122, 22);
             this.aboutToolStripMenuItem1.Text = "&About...";
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Location = new System.Drawing.Point(12, 33);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(61, 349);
+            this.pictureBox1.TabIndex = 11;
+            this.pictureBox1.TabStop = false;
+            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
+            this.pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
+            // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Location = new System.Drawing.Point(62, 33);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(343, 349);
+            this.richTextBox1.TabIndex = 12;
+            this.richTextBox1.Text = "";
+            // 
+            // timer1
+            // 
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(545, 562);
+            this.ClientSize = new System.Drawing.Size(555, 562);
+            this.Controls.Add(this.richTextBox1);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button3);
@@ -371,18 +391,16 @@ namespace Proyecto1
             this.Controls.Add(this.Cargar);
             this.Controls.Add(this.richTextBox2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.richTextBox1);
             this.Name = "Form1";
             this.Text = "Reportes";
             this.Load += new System.EventHandler(this.Form1_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.RichTextBox richTextBox2;
         private System.Windows.Forms.Button Cargar;
@@ -420,6 +438,9 @@ namespace Proyecto1
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator11;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem Reporte;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 

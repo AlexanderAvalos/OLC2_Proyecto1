@@ -13,11 +13,11 @@ using System.Windows.Forms;
 
 namespace Proyecto1
 {
-     
+
 
     public partial class Form1 : Form
     {
-
+        int caracter;
 
         List<string> salida = new List<string>();
         public Form1()
@@ -40,12 +40,13 @@ namespace Proyecto1
             ejecutar();
         }
 
-        private void ejecutar() {
-            
+        private void ejecutar()
+        {
+
             Sintactico_ejecutar sintactico = new Sintactico_ejecutar();
             string entrada = richTextBox1.Text.Trim();
             richTextBox2.AppendText(entrada);
-            sintactico.Analizar(entrada,new Gramatica_Ejecutar());
+            sintactico.Analizar(entrada, new Gramatica_Ejecutar());
         }
 
         private void Abrir()
@@ -66,7 +67,8 @@ namespace Proyecto1
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            timer1.Interval = 10;
+            timer1.Start();
         }
 
         private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -78,6 +80,38 @@ namespace Proyecto1
         {
             string entrada = richTextBox1.Text.Trim();
             richTextBox2.AppendText(entrada);
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            pictureBox1.Refresh();
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox1_Paint(object sender, PaintEventArgs e)
+        {
+            caracter = 0;
+            int altura = richTextBox1.GetPositionFromCharIndex(0).Y;
+            int cont = 0;
+            if (richTextBox1.Lines.Length > 0)
+            {
+                for (int i = 0; i < (richTextBox1.Lines.Length - 1); i++)
+                {
+                    cont = i + 1;
+                    string conv = cont.ToString();
+                    e.Graphics.DrawString(conv, richTextBox1.Font, Brushes.Blue, pictureBox1.Width - (e.Graphics.MeasureString((conv), richTextBox1.Font).Width + 10), altura);
+                    caracter += richTextBox1.Lines[i].Length + 1;
+                    altura = richTextBox1.GetPositionFromCharIndex(caracter).Y;
+
+                }
+            }
+            else {
+                e.Graphics.DrawString("1", richTextBox1.Font, Brushes.Blue, pictureBox1.Width - (e.Graphics.MeasureString("1", richTextBox1.Font).Width + 10), altura);
+            }
         }
     }
 }
