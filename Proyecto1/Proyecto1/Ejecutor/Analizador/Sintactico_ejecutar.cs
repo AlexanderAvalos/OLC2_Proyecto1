@@ -5,10 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Irony;
 using Irony.Parsing;
-using System.Collections.Generic;
 using System.Text;
-using Irony.Parsing;
-using System.Linq;
 using Proyecto1.Ejecutor.Analizador.Interfaces;
 using Proyecto1.Ejecutor.Modelos;
 using Proyecto1.Ejecutor.Instrucciones;
@@ -17,8 +14,6 @@ namespace Proyecto1.Ejecutor.Analizador
 {
     class Sintactico_ejecutar
     {
-        bool global = true;
-        bool aux_global = true;
         public List<string> salida = new List<string>();
         List<string> lst_ids = new List<string>();
 
@@ -133,13 +128,14 @@ namespace Proyecto1.Ejecutor.Analizador
                 {
                     Tipo obtener = BuscarTipo(nodo.ChildNodes.ElementAt(3));
                     string produccion = nodo.ChildNodes.ElementAt(1).Term.Name;
-                    if (produccion == "Pids") {
+                    if (produccion == "Pids")
+                    {
                         return new Declaracion(PIDS(nodo.ChildNodes.ElementAt(1)), obtener);
                     }
                 }
                 else if (nombre.ToLower() == "const")
                 {
-
+                    return new Asignacion(nodo.ChildNodes.ElementAt(1).ToString(), OPERACION_RELACIONAL(nodo.ChildNodes.ElementAt(3)));
                 }
 
             }
@@ -147,11 +143,123 @@ namespace Proyecto1.Ejecutor.Analizador
             return null;
         }
 
-        private Instruccion PTYPE(ParseTreeNode nodo) {
+        private Operacion OPERACION_RELACIONAL(ParseTreeNode nodo)
+        {
+            if (nodo.ChildNodes.Count == 3)
+            {
+                string operador = nodo.ChildNodes.ElementAt(1).ToString();
+                switch (operador)
+                {
+                    case ">":
+                        return new Operacion(Tipo.MAYOR, OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(0)), OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(2)));
+                    case "<":
+                        return new Operacion(Tipo.MENOR, OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(0)), OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(2)));
+                    case ">=":
+                        return new Operacion(Tipo.MAYORIGUAL, OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(0)), OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(2)));
+                    case "<=":
+                        return new Operacion(Tipo.MENORIGUAL, OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(0)), OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(2)));
+                    case "<>":
+                        return new Operacion(Tipo.DIFERENTE, OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(0)), OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(2)));
+                    case "=":
+                        return new Operacion(Tipo.IGUAL, OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(0)), OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(2)));
+                    default:
+                        return null;
+                }
+            }
+            else if (nodo.ChildNodes.Count == 1)
+            {
+                return OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(0));
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private Operacion OPERACION_NUMERICA(ParseTreeNode nodo)
+        {
+            if (nodo.ChildNodes.Count == 3)
+            {
+                string operador = nodo.ChildNodes.ElementAt(1).ToString();
+                switch (operador)
+                {
+                    case "+":
+                        return new Operacion(Tipo.MAS, OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(0)), OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(2)));
+                    case "-":
+                        return new Operacion(Tipo.MENOS, OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(0)), OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(2)));
+                    case "*":
+                        return new Operacion(Tipo.MULTIPLICACION, OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(0)), OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(2)));
+                    case "/":
+                        return new Operacion(Tipo.DIVISION, OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(0)), OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(2)));
+                    case "%":
+                        return new Operacion(Tipo.MODULO, OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(0)), OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(2)));
+                    default:
+                        string produccion = nodo.ChildNodes.ElementAt(1).Term.Name;
+                        if (produccion == "Operacion")
+                        {
+                            return POPERACION(nodo.ChildNodes.ElementAt(1));
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                }
+            }
+            else if (nodo.ChildNodes.Count == 1)
+            {
+                return PVALOR(nodo.ChildNodes.ElementAt(1));
+            }
             return null;
         }
 
-        private Tipo BuscarTipo(ParseTreeNode nodo) {
+        private Operacion POPERACION(ParseTreeNode nodo)
+        {
+            if (nodo.ChildNodes.Count == 3)
+            {
+                string operador = nodo.ChildNodes.ElementAt(1).ToString();
+                switch (operador)
+                {
+                    case "AND":
+                        return new Operacion(Tipo.AND, OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(0)), OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(2)));
+                    case "OR":
+                        return new Operacion(Tipo.OR, OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(0)), OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(2)));
+                    case "NOT":
+                        return new Operacion(Tipo.NOT, OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(0)), OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(2)));
+                    default:
+                        return OPERACION_RELACIONAL(nodo.ChildNodes.ElementAt(0));
+                }
+            }
+            return null;
+        }
+
+        private Operacion PVALOR(ParseTreeNode nodo)
+        {
+            if (nodo.ChildNodes.Count == 1)
+            {
+                string produccion = nodo.ChildNodes.ElementAt(0).Term.Name;
+                switch (produccion)
+                {
+                    case "Numero":
+                        return new Operacion(Double.Parse(nodo.ChildNodes.ElementAt(0).ToString()), Tipo.ENTERO);
+                    case "Decimal":
+                        return new Operacion(Double.Parse(nodo.ChildNodes.ElementAt(0).ToString()), Tipo.DECIMAL);
+                    case "true":
+                        return new Operacion(Boolean.Parse(nodo.ChildNodes.ElementAt(0).ToString()), Tipo.TRUE);
+                    case "false":
+                        return new Operacion(Boolean.Parse(nodo.ChildNodes.ElementAt(0).ToString()), Tipo.FALSE);
+
+                }
+            }
+            return null;
+        }
+
+        private Instruccion PTYPE(ParseTreeNode nodo)
+        {
+            return null;
+        }
+
+        private Tipo BuscarTipo(ParseTreeNode nodo)
+        {
             string tipo = nodo.Term.Name;
             switch (tipo.ToLower())
             {
@@ -170,22 +278,24 @@ namespace Proyecto1.Ejecutor.Analizador
             }
             return Tipo.NOENCONTRADO;
         }
-        private LinkedList<string> PIDS(ParseTreeNode nodo) {
+        private LinkedList<string> PIDS(ParseTreeNode nodo)
+        {
             if (nodo.ChildNodes.Count == 3)
             {
                 LinkedList<string> lst = PIDS(nodo.ChildNodes.ElementAt(0));
                 lst.AddLast(nodo.ChildNodes.ElementAt(2).Term.Name);
                 return lst;
             }
-            else {
+            else
+            {
                 LinkedList<string> lst = new LinkedList<string>();
                 lst.AddLast(nodo.ChildNodes.ElementAt(0).Term.Name);
                 return lst;
-                
+
             }
         }
 
-   
+
 
     }
 }

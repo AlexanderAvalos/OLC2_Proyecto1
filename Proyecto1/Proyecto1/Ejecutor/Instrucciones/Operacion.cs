@@ -61,6 +61,10 @@ namespace Proyecto1.Ejecutor.Instrucciones
             {
                 return (Double)operadorIzq.Ejecutar(tabla) / (Double)operadorDer.Ejecutar(tabla);
             }
+            else if (tipo_operacion == Tipo.MODULO)
+            {
+                return (Double)operadorIzq.Ejecutar(tabla) % (Double)operadorDer.Ejecutar(tabla);
+            }
             else if (tipo_operacion == Tipo.MAYOR)
             {
                 return (Double)operadorIzq.Ejecutar(tabla) > (Double)operadorDer.Ejecutar(tabla);
@@ -84,6 +88,10 @@ namespace Proyecto1.Ejecutor.Instrucciones
             else if (tipo_operacion == Tipo.DIFERENTE)
             {
                 return (Double)operadorIzq.Ejecutar(tabla) != (Double)operadorDer.Ejecutar(tabla);
+            }
+            else if (tipo_operacion == Tipo.IGUAL)
+            {
+                return (Double)operadorIzq.Ejecutar(tabla) == (Double)operadorDer.Ejecutar(tabla);
             }
             else if (tipo_operacion == Tipo.AND)
             {

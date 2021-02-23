@@ -141,38 +141,49 @@ namespace Proyecto1.Ejecutor.Modelos
                 return false;
         }
 
-        public bool existID_AA(string id) {
-            foreach (Simbolo item in this) 
+        public bool existID_AA(string id)
+        {
+            foreach (Simbolo item in this)
             {
                 if (item.Id.ToLower().Equals(id.ToLower())) return true;
             }
             return false;
         }
 
-        public void agregarPadre(TablaDeSimbolos ts) {
+        public void agregarPadre(TablaDeSimbolos ts)
+        {
             this.padre = ts;
         }
 
-        public void setValor(string id,Object valor) {
-            setValor(id,valor,this);
+        public void setValor(string id, Object valor)
+        {
+            setValor(id, valor, this);
         }
 
-        public void setValor(string id,object valor,TablaDeSimbolos nodo) {
+        public void setValor(string id, object valor, TablaDeSimbolos nodo)
+        {
 
-            foreach (Simbolo s in nodo) {
-                if (s.Id.ToLower().Equals(id.ToLower())) {
-                    if (s.Tipo == Tipo.ENTERO) {
+            foreach (Simbolo s in nodo)
+            {
+                if (s.Id.ToLower().Equals(id.ToLower()))
+                {
+                    if (s.Tipo == Tipo.ENTERO)
+                    {
                         s.Valor = Convert.ToDouble(valor);
-                    } else if (s.Tipo == Tipo.DECIMAL) {
+                    }
+                    else if (s.Tipo == Tipo.DECIMAL)
+                    {
                         s.Valor = Convert.ToDouble(valor);
 
-                    } else if (s.Tipo == Tipo.CADENA) {
+                    }
+                    else if (s.Tipo == Tipo.CADENA)
+                    {
                         s.Valor = valor.ToString();
                     }
                     return;
                 }
             }
-            if (nodo.padre != null) setValor(id,valor,nodo.padre);
+            if (nodo.padre != null) setValor(id, valor, nodo.padre);
 
         }
     }

@@ -8,8 +8,9 @@ namespace Proyecto1.Ejecutor.Instrucciones
 {
     class Pprogram : Instruccion
     {
-        public Pprogram() { 
-            
+        public Pprogram()
+        {
+
         }
 
 

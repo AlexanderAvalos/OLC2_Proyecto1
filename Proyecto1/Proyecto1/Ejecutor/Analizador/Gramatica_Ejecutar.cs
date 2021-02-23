@@ -43,7 +43,7 @@ namespace Proyecto1.Ejecutor.Analizador
                 SMAYORIGUAL = ToTerm(">="),
                 SMENORIGUAL = ToTerm("<="),
                 SDIFERENTE = ToTerm("<>"),
-                 //
+                //
                 SPYCOMA = ToTerm(";"),
                 SCOMA = ToTerm(","),
                 SDOSPUNTOS = ToTerm(":"),
@@ -160,6 +160,7 @@ namespace Proyecto1.Ejecutor.Analizador
                 | Operacion_numerica + SMENOS + Operacion_numerica
                 | Operacion_numerica + SDIVISION + Operacion_numerica
                 | Operacion_numerica + SMULTIPLICACION + Operacion_numerica
+                | Operacion_numerica + SMODULO + Operacion_numerica
                 | SPARIZQ + Operacion + SPARDER
                 | ID + SPARIZQ + SPARDER
                 | Valor;
@@ -173,10 +174,10 @@ namespace Proyecto1.Ejecutor.Analizador
                 | VSTRING;
             //--------
             Valor.Rule = NUMERO
-                | ID
-                | CADENA
-                | VFALSE
-                | VTRUE;
+                        | ID
+                        | CADENA
+                        | VFALSE
+                        | VTRUE;
 
 
             this.Root = S;

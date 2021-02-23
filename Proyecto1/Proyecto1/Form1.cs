@@ -109,7 +109,8 @@ namespace Proyecto1
 
                 }
             }
-            else {
+            else
+            {
                 e.Graphics.DrawString("1", richTextBox1.Font, Brushes.Blue, pictureBox1.Width - (e.Graphics.MeasureString("1", richTextBox1.Font).Width + 10), altura);
             }
         }

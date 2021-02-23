@@ -6,12 +6,12 @@ using System.Text;
 
 namespace Proyecto1.Ejecutor.Instrucciones
 {
-    class Asginacion : Instruccion
+    class Asignacion : Instruccion
     {
         string id;
         private Operacion valor;
 
-        public Asginacion(string id, Operacion valor)
+        public Asignacion(string id, Operacion valor)
         {
             this.id = id;
             this.valor = valor;

@@ -12,7 +12,7 @@ namespace Proyecto1.Ejecutor.Instrucciones
     {
         private LinkedList<string> id;
         private Tipo tipo;
-        
+
         public Declaracion(LinkedList<string> id, Tipo tipo)
         {
             this.id = id;
