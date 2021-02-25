@@ -122,12 +122,14 @@ namespace Proyecto1.Ejecutor.Analizador
                 | Empty;
             //----------
             Instruccion.Rule = Pprogram
-                | PDeclaracion;
+                | PDeclaracion
+                | Ptype;
             //-------
             Pprogram.Rule = RPROGRAM + ID + SPYCOMA;
             //-------
             PDeclaracion.Rule = RCONST + ID + SIGUAL + Operacion_relacional + SPYCOMA
-                | RVAR + Pids + SDOSPUNTOS + Tipo + Declaraciones;
+                | RVAR + Pids + SDOSPUNTOS + Tipo + Declaraciones
+                | Pids + SDOSPUNTOS + Tipo + Declaraciones;
 
             Declaraciones.Rule = SIGUAL + Operacion_relacional + SPYCOMA
                 | SPYCOMA;
@@ -139,7 +141,7 @@ namespace Proyecto1.Ejecutor.Analizador
 
             Objeto.Rule = Decla + Declaraciones2 + REND + SPYCOMA;
 
-            Declaraciones2.Rule = Declaraciones2 + SCOMA + PDeclaracion
+            Declaraciones2.Rule = Declaraciones2  + PDeclaracion
                 | PDeclaracion;
 
             Decla.Rule = ID + SIGUAL + ROBJECT + SPYCOMA;
@@ -175,6 +177,7 @@ namespace Proyecto1.Ejecutor.Analizador
             //--------
             Valor.Rule = NUMERO
                         | ID
+                        |REAL
                         | CADENA
                         | VFALSE
                         | VTRUE;

@@ -15,7 +15,6 @@ namespace Proyecto1.Ejecutor.Analizador
     class Sintactico_ejecutar
     {
         public List<string> salida = new List<string>();
-        List<string> lst_ids = new List<string>();
 
         public ParseTreeNode Analizar(string entrada, Grammar gramatica)
         {
@@ -99,12 +98,10 @@ namespace Proyecto1.Ejecutor.Analizador
             {
                 case "Pprogram":
                     return PPROGRAM(node.ChildNodes.ElementAt(0));
-                case "Declaracion":
+                case "PDeclaracion":
                     return DECLARACION(node.ChildNodes.ElementAt(0));
                 case "Ptype":
-                    return DECLARACION(node.ChildNodes.ElementAt(0));
-                case "Funcion":
-                    return null;
+                    return PTYPE(node.ChildNodes.ElementAt(0));
             }
             return null;
         }
@@ -138,6 +135,13 @@ namespace Proyecto1.Ejecutor.Analizador
                     return new Asignacion(nodo.ChildNodes.ElementAt(1).ToString(), OPERACION_RELACIONAL(nodo.ChildNodes.ElementAt(3)));
                 }
 
+            } else if (nodo.ChildNodes.Count == 4) {
+                    Tipo obtener = BuscarTipo(nodo.ChildNodes.ElementAt(2));
+                    string produccion = nodo.ChildNodes.ElementAt(0).Term.Name;
+                    if (produccion == "Pids")
+                    {
+                        return new Declaracion(PIDS(nodo.ChildNodes.ElementAt(0)), obtener);
+                    }
             }
 
             return null;
@@ -207,7 +211,7 @@ namespace Proyecto1.Ejecutor.Analizador
             }
             else if (nodo.ChildNodes.Count == 1)
             {
-                return PVALOR(nodo.ChildNodes.ElementAt(1));
+                return PVALOR(nodo.ChildNodes.ElementAt(0));
             }
             return null;
         }
@@ -240,13 +244,13 @@ namespace Proyecto1.Ejecutor.Analizador
                 switch (produccion)
                 {
                     case "Numero":
-                        return new Operacion(Double.Parse(nodo.ChildNodes.ElementAt(0).ToString()), Tipo.ENTERO);
+                        return new Operacion(Double.Parse(nodo.ChildNodes.ElementAt(0).Token.ValueString.ToString()), Tipo.ENTERO);
                     case "Decimal":
-                        return new Operacion(Double.Parse(nodo.ChildNodes.ElementAt(0).ToString()), Tipo.DECIMAL);
+                        return new Operacion(Double.Parse(nodo.ChildNodes.ElementAt(0).Token.ValueString.ToString()), Tipo.DECIMAL);
                     case "true":
-                        return new Operacion(Boolean.Parse(nodo.ChildNodes.ElementAt(0).ToString()), Tipo.TRUE);
+                        return new Operacion(Boolean.Parse(nodo.ChildNodes.ElementAt(0).Token.ValueString.ToString()), Tipo.TRUE);
                     case "false":
-                        return new Operacion(Boolean.Parse(nodo.ChildNodes.ElementAt(0).ToString()), Tipo.FALSE);
+                        return new Operacion(Boolean.Parse(nodo.ChildNodes.ElementAt(0).Token.ValueString.ToString()), Tipo.FALSE);
 
                 }
             }
@@ -255,12 +259,49 @@ namespace Proyecto1.Ejecutor.Analizador
 
         private Instruccion PTYPE(ParseTreeNode nodo)
         {
+            if (nodo.ChildNodes.Count == 2) {
+                return POBJETO(nodo.ChildNodes.ElementAt(1));
+            }
+            return null;
+        }
+
+        private Instruccion POBJETO(ParseTreeNode nodo)
+        {
+            if (nodo.ChildNodes.Count == 4) {
+               string id_objeto = PDECLA(nodo.ChildNodes.ElementAt(0));
+               LinkedList<Instruccion> lst_Declaraciones = DECLARACIONES2(nodo.ChildNodes.ElementAt(1));
+               return new Ptype(id_objeto,lst_Declaraciones);
+            }
+            return null;
+        }
+
+        private string PDECLA(ParseTreeNode nodo) {
+            if (nodo.ChildNodes.Count == 4) {
+                return nodo.ChildNodes.ElementAt(0).Token.ValueString.ToString();
+            }
+            return "";
+        }
+
+        private LinkedList<Instruccion> DECLARACIONES2(ParseTreeNode nodo)
+        {
+            if (nodo.ChildNodes.Count == 2)
+            {
+                LinkedList<Instruccion> lista = DECLARACIONES2(nodo.ChildNodes.ElementAt(0));
+                lista.AddLast(DECLARACION(nodo.ChildNodes.ElementAt(1)));
+                return lista;
+            }
+            else if (nodo.ChildNodes.Count == 1)
+            {
+                LinkedList<Instruccion> lista = new LinkedList<Instruccion>();
+                lista.AddLast(DECLARACION(nodo.ChildNodes.ElementAt(0)));
+                return lista;
+            }
             return null;
         }
 
         private Tipo BuscarTipo(ParseTreeNode nodo)
         {
-            string tipo = nodo.Term.Name;
+            string tipo = nodo.ChildNodes.ElementAt(0).Term.Name;
             switch (tipo.ToLower())
             {
                 case "integer":
@@ -283,19 +324,22 @@ namespace Proyecto1.Ejecutor.Analizador
             if (nodo.ChildNodes.Count == 3)
             {
                 LinkedList<string> lst = PIDS(nodo.ChildNodes.ElementAt(0));
-                lst.AddLast(nodo.ChildNodes.ElementAt(2).Term.Name);
+                lst.AddLast(nodo.ChildNodes.ElementAt(2).Token.ValueString.ToString());
                 return lst;
             }
             else
             {
                 LinkedList<string> lst = new LinkedList<string>();
-                lst.AddLast(nodo.ChildNodes.ElementAt(0).Term.Name);
+                lst.AddLast(nodo.ChildNodes.ElementAt(0).Token.ValueString.ToString());
                 return lst;
 
             }
         }
 
-
+        private string generarGrafica() {
+            
+            return "";
+        }
 
     }
 }
