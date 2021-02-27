@@ -11,7 +11,7 @@ namespace Proyecto1.Ejecutor.Instrucciones
 
         string id;
         LinkedList  <Instruccion>  lst_instruccion;
-
+        
         public Ptype(string id, LinkedList<Instruccion> lst_instruccion)
         {
             this.id = id;
@@ -20,6 +20,18 @@ namespace Proyecto1.Ejecutor.Instrucciones
 
         public object Ejecutar(TablaDeSimbolos tabla)
         {
+            TablaDeSimbolos tablaaux = new TablaDeSimbolos();
+            foreach (var item in lst_instruccion)
+            {
+                item.Ejecutar(tablaaux);
+            }
+            if (Program.heap.ContainsKey(id))
+            {
+                //error
+            }
+            else {
+                Program.heap.Add(id,tablaaux);
+            }
             return null;
         }
     }

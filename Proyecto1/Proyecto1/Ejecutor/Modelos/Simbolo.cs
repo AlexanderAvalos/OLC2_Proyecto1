@@ -16,6 +16,12 @@ namespace Proyecto1.Ejecutor.Modelos
             this.tipo = tipo;
             this.id = id;
         }
+        public Simbolo(Tipo tipo, string id, object valor)
+        {
+            this.tipo = tipo;
+            this.id = id;
+            this.valor = valor;
+        }
 
         public Tipo Tipo { get => tipo; set => tipo = value; }
         public string Id { get => id; set => id = value; }

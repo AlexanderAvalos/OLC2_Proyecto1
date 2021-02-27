@@ -1,3 +1,4 @@
+using Proyecto1.Ejecutor.Modelos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace Proyecto1
         ///  The main entry point for the application.
         /// </summary>
         [STAThread]
+      
         static void Main()
         {
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
@@ -19,5 +21,6 @@ namespace Proyecto1
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
         }
+        public static Dictionary<string, TablaDeSimbolos> heap = new Dictionary<string, TablaDeSimbolos>();
     }
 }

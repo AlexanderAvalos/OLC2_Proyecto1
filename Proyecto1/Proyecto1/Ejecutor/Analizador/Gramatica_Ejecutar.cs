@@ -34,8 +34,8 @@ namespace Proyecto1.Ejecutor.Analizador
                 //agrupacion
                 SPARIZQ = ToTerm("("),
                 SPARDER = ToTerm(")"),
-                SLLAIZQ = ToTerm("["),
-                SLLADER = ToTerm("]"),
+                SCORIZQ = ToTerm("["),
+                SCORDER = ToTerm("]"),
                 //relacional
                 SMAYOR = ToTerm(">"),
                 SMENOR = ToTerm("<"),
@@ -48,7 +48,7 @@ namespace Proyecto1.Ejecutor.Analizador
                 SCOMA = ToTerm(","),
                 SDOSPUNTOS = ToTerm(":"),
                 SPUNTO = ToTerm("."),
-                SIGUALAR = ToTerm(":="),
+                SASIGNAR = ToTerm(":="),
                 //logicos reservadas
                 LAND = ToTerm("and"),
                 LOR = ToTerm("or"),
@@ -95,6 +95,7 @@ namespace Proyecto1.Ejecutor.Analizador
                 PDeclaracion = new NonTerminal("PDeclaracion"),
                 Pprogram = new NonTerminal("Pprogram"),
                 Ptype = new NonTerminal("Ptype"),
+                PAsignacion = new NonTerminal("PAsignacion"),
                 //declaracion
                 Operacion_relacional = new NonTerminal("Operacion_relacional"),
                 Tipo = new NonTerminal("Tipo"),
@@ -109,7 +110,10 @@ namespace Proyecto1.Ejecutor.Analizador
                 Operacion_numerica = new NonTerminal("Operacion_Numerica"),
                 //operacion_numerica
                 Operacion = new NonTerminal("Operacion"),
-                Valor = new NonTerminal("Valor")
+                Valor = new NonTerminal("Valor"),
+                // array
+                Parray = new NonTerminal("Parray"),
+                Pindice = new NonTerminal("Pindice")
                 ;
             #endregion
 
@@ -123,7 +127,8 @@ namespace Proyecto1.Ejecutor.Analizador
             //----------
             Instruccion.Rule = Pprogram
                 | PDeclaracion
-                | Ptype;
+                | Ptype
+                | PAsignacion;
             //-------
             Pprogram.Rule = RPROGRAM + ID + SPYCOMA;
             //-------
@@ -139,13 +144,23 @@ namespace Proyecto1.Ejecutor.Analizador
             //----------------------
             Ptype.Rule = RTYPE + Objeto;
 
-            Objeto.Rule = Decla + Declaraciones2 + REND + SPYCOMA;
+            Objeto.Rule = Decla + Declaraciones2 + REND + SPYCOMA
+                        | ID + SIGUAL + RARRAY + Parray;
 
-            Declaraciones2.Rule = Declaraciones2  + PDeclaracion
+            Declaraciones2.Rule = Declaraciones2 + PDeclaracion
                 | PDeclaracion;
 
             Decla.Rule = ID + SIGUAL + ROBJECT + SPYCOMA;
             //--------------
+            Parray.Rule = SCORDER + Pindice + SCORDER + ROF + Pindice + SPYCOMA
+                        | ROF + SCORDER + Pindice + SCORDER + ROF + Pindice + SPYCOMA;
+
+            Pindice.Rule = Tipo
+                          | Operacion_relacional + SPUNTO + SPUNTO + Operacion_relacional;
+            //-------------
+            PAsignacion.Rule = ID + SASIGNAR + Operacion_relacional + SPYCOMA;
+
+            //----------------
             Operacion.Rule = Operacion + LAND + Operacion
                 | Operacion + LOR + Operacion
                 | Operacion_relacional;
@@ -177,7 +192,7 @@ namespace Proyecto1.Ejecutor.Analizador
             //--------
             Valor.Rule = NUMERO
                         | ID
-                        |REAL
+                        | REAL
                         | CADENA
                         | VFALSE
                         | VTRUE;

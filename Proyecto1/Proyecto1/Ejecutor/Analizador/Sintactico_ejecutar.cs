@@ -125,25 +125,47 @@ namespace Proyecto1.Ejecutor.Analizador
                 {
                     Tipo obtener = BuscarTipo(nodo.ChildNodes.ElementAt(3));
                     string produccion = nodo.ChildNodes.ElementAt(1).Term.Name;
+                    string produccion_Declaraciones = nodo.ChildNodes.ElementAt(4).Term.Name;
+                    Operacion valor = null;
+                    if (produccion_Declaraciones == "Declaraciones")
+                    {
+                        valor = DECLARACIONES(nodo.ChildNodes.ElementAt(4));
+                    }
                     if (produccion == "Pids")
                     {
-                        return new Declaracion(PIDS(nodo.ChildNodes.ElementAt(1)), obtener);
+                        return new Declaracion(PIDS(nodo.ChildNodes.ElementAt(1)), obtener, valor);
                     }
                 }
                 else if (nombre.ToLower() == "const")
                 {
-                    return new Asignacion(nodo.ChildNodes.ElementAt(1).ToString(), OPERACION_RELACIONAL(nodo.ChildNodes.ElementAt(3)));
+                    return new Asignacion(nodo.ChildNodes.ElementAt(1).Token.ValueString.ToString(), OPERACION_RELACIONAL(nodo.ChildNodes.ElementAt(3)));
                 }
 
-            } else if (nodo.ChildNodes.Count == 4) {
-                    Tipo obtener = BuscarTipo(nodo.ChildNodes.ElementAt(2));
-                    string produccion = nodo.ChildNodes.ElementAt(0).Term.Name;
-                    if (produccion == "Pids")
-                    {
-                        return new Declaracion(PIDS(nodo.ChildNodes.ElementAt(0)), obtener);
-                    }
+            }
+            else if (nodo.ChildNodes.Count == 4)
+            {
+                Tipo obtener = BuscarTipo(nodo.ChildNodes.ElementAt(2));
+                string produccion = nodo.ChildNodes.ElementAt(0).Term.Name;
+                string produccion_Declaraciones = nodo.ChildNodes.ElementAt(3).Term.Name;
+                Operacion valor = null;
+                if (produccion_Declaraciones == "Declaraciones")
+                {
+                    valor = DECLARACIONES(nodo.ChildNodes.ElementAt(3));
+                }
+                if (produccion == "Pids")
+                {
+                    return new Declaracion(PIDS(nodo.ChildNodes.ElementAt(0)), obtener, valor);
+                }
             }
 
+            return null;
+        }
+        private Operacion DECLARACIONES(ParseTreeNode nodo)
+        {
+            if (nodo.ChildNodes.Count == 3)
+            {
+                return OPERACION_RELACIONAL(nodo.ChildNodes.ElementAt(1));
+            }
             return null;
         }
 
@@ -259,24 +281,82 @@ namespace Proyecto1.Ejecutor.Analizador
 
         private Instruccion PTYPE(ParseTreeNode nodo)
         {
-            if (nodo.ChildNodes.Count == 2) {
+            if (nodo.ChildNodes.Count == 2)
+            {
                 return POBJETO(nodo.ChildNodes.ElementAt(1));
             }
-            return null;
+            else
+            {
+                return null;
+            }
         }
 
         private Instruccion POBJETO(ParseTreeNode nodo)
         {
-            if (nodo.ChildNodes.Count == 4) {
-               string id_objeto = PDECLA(nodo.ChildNodes.ElementAt(0));
-               LinkedList<Instruccion> lst_Declaraciones = DECLARACIONES2(nodo.ChildNodes.ElementAt(1));
-               return new Ptype(id_objeto,lst_Declaraciones);
+            if (nodo.ChildNodes.Count == 4)
+            {
+                string produccion = nodo.ChildNodes.ElementAt(0).Term.Name;
+                if (produccion == "Decla")
+                {
+                    string id_objeto = PDECLA(nodo.ChildNodes.ElementAt(0));
+                    LinkedList<Instruccion> lst_Declaraciones = DECLARACIONES2(nodo.ChildNodes.ElementAt(1));
+                    return new Ptype(id_objeto, lst_Declaraciones);
+                }
+                else if (produccion == "Parray")
+                {
+                    bool verificar = verificarTipoIndice(nodo.ChildNodes.ElementAt(3));
+                    if (verificar) {
+
+                    }
+                    else
+                    {
+                        LinkedList<Operacion> lst_indice = PARRAY(nodo.ChildNodes.ElementAt(3));
+                        return null;
+                    }
+                  
+                }
             }
             return null;
         }
+        private bool verificarTipoIndice(ParseTreeNode nodo)
+        {
+            if (nodo.ChildNodes.Count == 7)
+            {
+                string produccion = nodo.ChildNodes.ElementAt(1).Term.Name;
+                if (produccion == "Pindice") {
+                    return verificartipo(nodo.ChildNodes.ElementAt(1));
+                }
+                else {
+                    return verificartipo(nodo.ChildNodes.ElementAt(2));
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
 
-        private string PDECLA(ParseTreeNode nodo) {
-            if (nodo.ChildNodes.Count == 4) {
+        private bool verificartipo(ParseTreeNode nodo) {
+            if (nodo.ChildNodes.Count == 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+           
+        }
+        private LinkedList<Operacion> PARRAY(ParseTreeNode nodo)
+        {
+
+            return null;
+        }
+
+        private string PDECLA(ParseTreeNode nodo)
+        {
+            if (nodo.ChildNodes.Count == 4)
+            {
                 return nodo.ChildNodes.ElementAt(0).Token.ValueString.ToString();
             }
             return "";
@@ -336,8 +416,9 @@ namespace Proyecto1.Ejecutor.Analizador
             }
         }
 
-        private string generarGrafica() {
-            
+        private string generarGrafica()
+        {
+
             return "";
         }
 
