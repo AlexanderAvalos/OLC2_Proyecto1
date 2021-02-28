@@ -302,56 +302,111 @@ namespace Proyecto1.Ejecutor.Analizador
                     LinkedList<Instruccion> lst_Declaraciones = DECLARACIONES2(nodo.ChildNodes.ElementAt(1));
                     return new Ptype(id_objeto, lst_Declaraciones);
                 }
-                else if (produccion == "Parray")
+            }
+            else if (nodo.ChildNodes.Count == 5)
+            {
+                bool verificar = verificarTipoIndice(nodo.ChildNodes.ElementAt(3));
+                if (verificar)
                 {
-                    bool verificar = verificarTipoIndice(nodo.ChildNodes.ElementAt(3));
-                    if (verificar) {
-
+                    if (verificarTipoElemento(nodo.ChildNodes.ElementAt(3)))
+                    {
+                        return new Parray(nodo.ChildNodes.ElementAt(0).Token.ValueString.ToString(), PARRAYTIPO(nodo.ChildNodes.ElementAt(3)), PARRAYTIPOT(nodo.ChildNodes.ElementAt(3)));
                     }
                     else
                     {
-                        LinkedList<Operacion> lst_indice = PARRAY(nodo.ChildNodes.ElementAt(3));
-                        return null;
+                        return new Parray(nodo.ChildNodes.ElementAt(0).Token.ValueString.ToString(), PARRAYTIPO(nodo.ChildNodes.ElementAt(3)), PARRAYOPERACIONT(nodo.ChildNodes.ElementAt(3)));
                     }
-                  
+
                 }
+                else
+                {
+                    if (verificarTipoElemento(nodo.ChildNodes.ElementAt(3)))
+                    {
+                        return new Parray(nodo.ChildNodes.ElementAt(0).Token.ValueString.ToString(), PARRAYOPERACION(nodo.ChildNodes.ElementAt(3)), PARRAYTIPOT(nodo.ChildNodes.ElementAt(3)));
+                    }
+                    else
+                    {
+                        return new Parray(nodo.ChildNodes.ElementAt(0).Token.ValueString.ToString(), PARRAYOPERACION(nodo.ChildNodes.ElementAt(3)), PARRAYOPERACIONT(nodo.ChildNodes.ElementAt(3)));
+                    }
+                }
+
+            }
+
+            return null;
+        }
+
+        //indice
+        private LinkedList<Operacion> PARRAYOPERACION(ParseTreeNode nodo)
+        {
+            if (nodo.ChildNodes.Count == 5)
+            {
+                return PINDICE(nodo.ChildNodes.ElementAt(1));
+            }
+            else if (nodo.ChildNodes.Count == 6)
+            {
+                return PINDICE(nodo.ChildNodes.ElementAt(2));
             }
             return null;
         }
-        private bool verificarTipoIndice(ParseTreeNode nodo)
+        private Tipo PARRAYTIPO(ParseTreeNode nodo)
         {
-            if (nodo.ChildNodes.Count == 7)
+            if (nodo.ChildNodes.Count == 5)
             {
-                string produccion = nodo.ChildNodes.ElementAt(1).Term.Name;
-                if (produccion == "Pindice") {
-                    return verificartipo(nodo.ChildNodes.ElementAt(1));
-                }
-                else {
-                    return verificartipo(nodo.ChildNodes.ElementAt(2));
-                }
+                return PINDICET(nodo.ChildNodes.ElementAt(1));
             }
-            else
+            else if (nodo.ChildNodes.Count == 6)
             {
-                return false;
+                return PINDICET(nodo.ChildNodes.ElementAt(2));
             }
+            return Tipo.NOENCONTRADO;
+        }
+        //elemento
+        private LinkedList<Operacion> PARRAYOPERACIONT(ParseTreeNode nodo)
+        {
+            if (nodo.ChildNodes.Count == 5)
+            {
+                return PINDICE(nodo.ChildNodes.ElementAt(4));
+            }
+            else if (nodo.ChildNodes.Count == 6)
+            {
+                return PINDICE(nodo.ChildNodes.ElementAt(5));
+            }
+            return null;
+        }
+        private Tipo PARRAYTIPOT(ParseTreeNode nodo)
+        {
+            if (nodo.ChildNodes.Count == 5)
+            {
+                return PINDICET(nodo.ChildNodes.ElementAt(4));
+            }
+            else if (nodo.ChildNodes.Count == 6)
+            {
+                return PINDICET(nodo.ChildNodes.ElementAt(5));
+            }
+            return Tipo.NOENCONTRADO;
         }
 
-        private bool verificartipo(ParseTreeNode nodo) {
+
+        private LinkedList<Operacion> PINDICE(ParseTreeNode nodo)
+        {
+            LinkedList<Operacion> lst_indices = new LinkedList<Operacion>();
+            if (nodo.ChildNodes.Count == 4)
+            {
+                lst_indices.AddLast(OPERACION_RELACIONAL(nodo.ChildNodes.ElementAt(0)));
+                lst_indices.AddLast(OPERACION_RELACIONAL(nodo.ChildNodes.ElementAt(3)));
+                return lst_indices;
+            }
+            return null;
+        }
+        private Tipo PINDICET(ParseTreeNode nodo)
+        {
             if (nodo.ChildNodes.Count == 1)
             {
-                return true;
+                return BuscarTipo(nodo.ChildNodes.ElementAt(0));
             }
-            else
-            {
-                return false;
-            }
-           
+            return Tipo.NOENCONTRADO;
         }
-        private LinkedList<Operacion> PARRAY(ParseTreeNode nodo)
-        {
 
-            return null;
-        }
 
         private string PDECLA(ParseTreeNode nodo)
         {
@@ -415,7 +470,83 @@ namespace Proyecto1.Ejecutor.Analizador
 
             }
         }
+        private bool verificarTipoIndice(ParseTreeNode nodo)
+        {
+            if (nodo.ChildNodes.Count == 5)
+            {
+                string produccion = nodo.ChildNodes.ElementAt(1).Term.Name;
+                if (produccion == "Pindice")
+                {
+                    return verificartipo(nodo.ChildNodes.ElementAt(1));
+                }
+                else
+                {
+                    return false;
+                }
 
+            }
+            else if (nodo.ChildNodes.Count == 6)
+            {
+                string produccion = nodo.ChildNodes.ElementAt(2).Term.Name;
+                if (produccion == "Pindice")
+                {
+                    return verificartipo(nodo.ChildNodes.ElementAt(2));
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        private bool verificarTipoElemento(ParseTreeNode nodo)
+        {
+            if (nodo.ChildNodes.Count == 5)
+            {
+                string produccion = nodo.ChildNodes.ElementAt(4).Term.Name;
+                if (produccion == "Pindice")
+                {
+                    return verificartipo(nodo.ChildNodes.ElementAt(4));
+                }
+                else
+                {
+                    return false;
+                }
+
+            }
+            else if (nodo.ChildNodes.Count == 6)
+            {
+                string produccion = nodo.ChildNodes.ElementAt(5).Term.Name;
+                if (produccion == "Pindice")
+                {
+                    return verificartipo(nodo.ChildNodes.ElementAt(5));
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private bool verificartipo(ParseTreeNode nodo)
+        {
+            if (nodo.ChildNodes.Count == 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
         private string generarGrafica()
         {
 

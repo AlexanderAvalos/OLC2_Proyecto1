@@ -9,21 +9,40 @@ namespace Proyecto1.Ejecutor.Instrucciones
     class Parray : Instruccion
     {
         string id;
-        LinkedList<Operacion>  indice;
-        Tipo indice2;
-        Tipo tipo;
+        //primer indice
+        LinkedList<Operacion> indiciO;
+        Tipo indiceT;
+        //segundo indice
+        LinkedList<Operacion> elementoO;
+        Tipo elementoT;
+        // Tipo-operaecion
+        public Parray(string id, Tipo indiceT, LinkedList<Operacion> elemento)
+        {
+            this.id = id;
+            this.indiceT = indiceT;
+            this.elementoO = elemento;
+        }
 
+        // Tipo-Tipo
         public Parray(string id, Tipo indice2, Tipo tipo)
         {
             this.id = id;
-            this.indice2 = indice2;
-            this.tipo = tipo;
+            this.indiceT = indice2;
+            this.elementoT = tipo;
         }
-        public Parray(string id, LinkedList<Operacion>  indicie, Tipo tipo)
+        // Operacion-tipo
+        public Parray(string id, LinkedList<Operacion> indicie, Tipo tipo)
         {
             this.id = id;
-            this.indice = indicie;
-            this.tipo = tipo;
+            this.indiciO = indicie;
+            this.elementoT = tipo;
+        }
+        //Tipo-elemento
+        public Parray(string id, LinkedList<Operacion> indicie, LinkedList<Operacion> elemento)
+        {
+            this.id = id;
+            this.indiciO = indicie;
+            this.elementoO = elemento;
         }
 
         public object Ejecutar(TablaDeSimbolos tabla)

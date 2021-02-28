@@ -68,9 +68,9 @@ namespace Proyecto1.Ejecutor.Analizador
                 RPROGRAM = ToTerm("program"),
                 ROBJECT = ToTerm("object"),
                 RCONST = ToTerm("const"),
-                RBEGIN = ToTerm("begin"),
                 RARRAY = ToTerm("array"),
                 ROF = ToTerm("of"),
+                RBEGIN = ToTerm("begin"),
                 RIF = ToTerm("if"),
                 RTHEN = ToTerm("then"),
                 RELSE = ToTerm("else"),
@@ -128,7 +128,7 @@ namespace Proyecto1.Ejecutor.Analizador
             Instruccion.Rule = Pprogram
                 | PDeclaracion
                 | Ptype
-                | PAsignacion;
+               ;
             //-------
             Pprogram.Rule = RPROGRAM + ID + SPYCOMA;
             //-------
@@ -145,18 +145,18 @@ namespace Proyecto1.Ejecutor.Analizador
             Ptype.Rule = RTYPE + Objeto;
 
             Objeto.Rule = Decla + Declaraciones2 + REND + SPYCOMA
-                        | ID + SIGUAL + RARRAY + Parray;
+                        | ID + SIGUAL + RARRAY + Parray + SPYCOMA;
 
             Declaraciones2.Rule = Declaraciones2 + PDeclaracion
                 | PDeclaracion;
 
             Decla.Rule = ID + SIGUAL + ROBJECT + SPYCOMA;
             //--------------
-            Parray.Rule = SCORDER + Pindice + SCORDER + ROF + Pindice + SPYCOMA
-                        | ROF + SCORDER + Pindice + SCORDER + ROF + Pindice + SPYCOMA;
+            Parray.Rule = SCORIZQ + Pindice + SCORDER + ROF + Pindice
+                        | ROF + SCORIZQ + Pindice + SCORDER + ROF + Pindice;
 
             Pindice.Rule = Tipo
-                          | Operacion_relacional + SPUNTO + SPUNTO + Operacion_relacional;
+                         | Operacion_relacional + SPUNTO + SPUNTO + Operacion_relacional;
             //-------------
             PAsignacion.Rule = ID + SASIGNAR + Operacion_relacional + SPYCOMA;
 
