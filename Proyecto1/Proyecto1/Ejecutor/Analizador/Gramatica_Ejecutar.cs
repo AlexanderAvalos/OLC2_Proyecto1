@@ -134,7 +134,8 @@ namespace Proyecto1.Ejecutor.Analizador
             //-------
             PDeclaracion.Rule = RCONST + ID + SIGUAL + Operacion_relacional + SPYCOMA
                 | RVAR + Pids + SDOSPUNTOS + Tipo + Declaraciones
-                | Pids + SDOSPUNTOS + Tipo + Declaraciones;
+                | Pids + SDOSPUNTOS + Tipo + Declaraciones
+                ;
 
             Declaraciones.Rule = SIGUAL + Operacion_relacional + SPYCOMA
                 | SPYCOMA;

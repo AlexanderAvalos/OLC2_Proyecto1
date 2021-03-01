@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "pPbTLNot7Qzx3eNaPjTUJEpck00R5J0F1ruZMzYJejPZU0sZVwXQqj8s46xSFzv4Ro9MlLTyO4s4s57lQ2Xr6Q==",
+  "dgSpecHash": "hHjoOPAKwbiIEBAqoGLAYZXl60Nw4GLvhGMe4ipN3SCv3MXNGn5u5p4CxSruCoXNBsO5uEcdAHjZT399haWqtA==",
   "success": true,
   "projectFilePath": "C:\\Users\\Alex\\Desktop\\[OLC2]Proyecto1\\OLC2_Proyecto1\\Proyecto1\\Proyecto1\\Proyecto1.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\Alex\\.nuget\\packages\\fernandreu.scintillanet\\4.0.4\\fernandreu.scintillanet.4.0.4.nupkg.sha512"
+  ],
   "logs": []
 }

@@ -1,11 +1,95 @@
 {
   "version": 3,
   "targets": {
-    ".NETCoreApp,Version=v3.1": {}
+    ".NETCoreApp,Version=v3.1": {
+      "fernandreu.ScintillaNET/4.0.4": {
+        "type": "package",
+        "compile": {
+          "lib/netcoreapp3.1/ScintillaNET.dll": {}
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/ScintillaNET.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.WindowsDesktop.App.WindowsForms"
+        ],
+        "runtimeTargets": {
+          "runtimes/win-x64/native/License.txt": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/SciLexer.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/SciLexer.exp": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/SciLexer.lib": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/version.txt": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x86/native/License.txt": {
+            "assetType": "native",
+            "rid": "win-x86"
+          },
+          "runtimes/win-x86/native/SciLexer.dll": {
+            "assetType": "native",
+            "rid": "win-x86"
+          },
+          "runtimes/win-x86/native/SciLexer.exp": {
+            "assetType": "native",
+            "rid": "win-x86"
+          },
+          "runtimes/win-x86/native/SciLexer.lib": {
+            "assetType": "native",
+            "rid": "win-x86"
+          },
+          "runtimes/win-x86/native/version.txt": {
+            "assetType": "native",
+            "rid": "win-x86"
+          }
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "fernandreu.ScintillaNET/4.0.4": {
+      "sha512": "UpnuIthh+VQiPBGAkrwLe8t1oG+ciL0j1FlZlkCYJ6Hz0MHG6BJQCcVIGzOoecdpnYqUCnj6CrZWnYZNL9hmPg==",
+      "type": "package",
+      "path": "fernandreu.scintillanet/4.0.4",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "fernandreu.scintillanet.4.0.4.nupkg.sha512",
+        "fernandreu.scintillanet.nuspec",
+        "lib/net461/ScintillaNET.dll",
+        "lib/net461/ScintillaNET.xml",
+        "lib/netcoreapp3.1/ScintillaNET.dll",
+        "lib/netcoreapp3.1/ScintillaNET.xml",
+        "runtimes/win-x64/native/License.txt",
+        "runtimes/win-x64/native/SciLexer.dll",
+        "runtimes/win-x64/native/SciLexer.exp",
+        "runtimes/win-x64/native/SciLexer.lib",
+        "runtimes/win-x64/native/version.txt",
+        "runtimes/win-x86/native/License.txt",
+        "runtimes/win-x86/native/SciLexer.dll",
+        "runtimes/win-x86/native/SciLexer.exp",
+        "runtimes/win-x86/native/SciLexer.lib",
+        "runtimes/win-x86/native/version.txt"
+      ]
+    }
+  },
   "projectFileDependencyGroups": {
-    ".NETCoreApp,Version=v3.1": []
+    ".NETCoreApp,Version=v3.1": [
+      "fernandreu.ScintillaNET >= 4.0.4"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\Alex\\.nuget\\packages\\": {}
@@ -45,6 +129,12 @@
     "frameworks": {
       "netcoreapp3.1": {
         "targetAlias": "netcoreapp3.1",
+        "dependencies": {
+          "fernandreu.ScintillaNET": {
+            "target": "Package",
+            "version": "[4.0.4, )"
+          }
+        },
         "imports": [
           "net461",
           "net462",

@@ -117,7 +117,7 @@ namespace Proyecto1.Ejecutor.Analizador
 
         private Instruccion DECLARACION(ParseTreeNode nodo)
         {
-
+            LinkedList<Instruccion> lst_declaracione = new LinkedList<Instruccion>();
             if (nodo.ChildNodes.Count == 5)
             {
                 string nombre = nodo.ChildNodes.ElementAt(0).Term.Name;
@@ -135,8 +135,9 @@ namespace Proyecto1.Ejecutor.Analizador
                     {
                         return new Declaracion(PIDS(nodo.ChildNodes.ElementAt(1)), obtener, valor);
                     }
+
                 }
-                else if (nombre.ToLower() == "const")
+                else
                 {
                     return new Asignacion(nodo.ChildNodes.ElementAt(1).Token.ValueString.ToString(), OPERACION_RELACIONAL(nodo.ChildNodes.ElementAt(3)));
                 }
