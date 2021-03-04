@@ -47,6 +47,7 @@ namespace Proyecto1.Ejecutor.Instrucciones
         {
             if (tipo_operacion == Tipo.MAS)
             {
+             
                 return (Double)operadorIzq.Ejecutar(tabla) + (Double)operadorDer.Ejecutar(tabla);
             }
             else if (tipo_operacion == Tipo.MENOS)
@@ -91,7 +92,7 @@ namespace Proyecto1.Ejecutor.Instrucciones
             }
             else if (tipo_operacion == Tipo.IGUAL)
             {
-                return (Double)operadorIzq.Ejecutar(tabla) == (Double)operadorDer.Ejecutar(tabla);
+                return (Boolean)operadorIzq.Ejecutar(tabla) == (Boolean)operadorDer.Ejecutar(tabla);
             }
             else if (tipo_operacion == Tipo.AND)
             {

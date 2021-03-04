@@ -40,6 +40,7 @@ namespace Proyecto1.Ejecutor.Analizador
                 SMAYOR = ToTerm(">"),
                 SMENOR = ToTerm("<"),
                 SIGUAL = ToTerm("="),
+
                 SMAYORIGUAL = ToTerm(">="),
                 SMENORIGUAL = ToTerm("<="),
                 SDIFERENTE = ToTerm("<>"),
@@ -62,6 +63,7 @@ namespace Proyecto1.Ejecutor.Analizador
                 VVOID = ToTerm("void"),
                 VSTRING = ToTerm("string"),
                 //reservadas
+                RTO = ToTerm("to"),
                 RVAR = ToTerm("var"),
                 RTYPE = ToTerm("type"),
                 REND = ToTerm("end"),
@@ -95,7 +97,7 @@ namespace Proyecto1.Ejecutor.Analizador
                 PDeclaracion = new NonTerminal("PDeclaracion"),
                 Pprogram = new NonTerminal("Pprogram"),
                 Ptype = new NonTerminal("Ptype"),
-                PAsignacion = new NonTerminal("PAsignacion"),
+
                 //declaracion
                 Operacion_relacional = new NonTerminal("Operacion_relacional"),
                 Tipo = new NonTerminal("Tipo"),
@@ -113,8 +115,35 @@ namespace Proyecto1.Ejecutor.Analizador
                 Valor = new NonTerminal("Valor"),
                 // array
                 Parray = new NonTerminal("Parray"),
-                Pindice = new NonTerminal("Pindice")
-                ;
+                Pindice = new NonTerminal("Pindice"),
+                // begin
+                PBegin = new NonTerminal("PBegin"),
+                SMain = new NonTerminal("SMain"),
+                //sentencias
+                Sentencia = new NonTerminal("Sentencia"),
+                Sentencias = new NonTerminal("Sentencias"),
+                // lista de sentencias
+                PAsignacion = new NonTerminal("PAsignacion"),
+                SentenciaIf = new NonTerminal("SentenciaIf"),
+                SentenciaSwitch = new NonTerminal("SentenciaSwitch"),
+                SentenciaWhile = new NonTerminal("SentenciaWhile"),
+                SentenciaFor = new NonTerminal("SentenciaFor"),
+                SentenciaRepeat = new NonTerminal("SentenciaRepeat"),
+                SentenciasBreak = new NonTerminal("SentenciasBreak"),
+                SentenciaContinue = new NonTerminal("SentenciaContinue"),
+                //Asignacion
+                Asignacionaux = new NonTerminal("AsignacionAux"),
+                //Sentencias If
+                else_if = new NonTerminal("else_if"),
+                elif = new NonTerminal("elif"),
+                //Sentencias Switch
+                Pcasos = new NonTerminal("Pcasos"),
+                Pcaso = new NonTerminal("Pcaso"),
+                Caso = new NonTerminal("Caso"),
+                //sentencias For
+                inicializacion = new NonTerminal("inicializacion")
+
+            ;
             #endregion
 
             #region Gramatica
@@ -128,6 +157,7 @@ namespace Proyecto1.Ejecutor.Analizador
             Instruccion.Rule = Pprogram
                 | PDeclaracion
                 | Ptype
+                | PBegin
                ;
             //-------
             Pprogram.Rule = RPROGRAM + ID + SPYCOMA;
@@ -158,10 +188,87 @@ namespace Proyecto1.Ejecutor.Analizador
 
             Pindice.Rule = Tipo
                          | Operacion_relacional + SPUNTO + SPUNTO + Operacion_relacional;
+            //-----------------------
+            Sentencias.Rule = Sentencias + Sentencia
+                            | Sentencia
+                            | Empty;
+            //-----------------
+            Sentencia.Rule = PAsignacion
+                | SentenciaIf
+                | SentenciaSwitch
+                | SentenciaWhile
+                | SentenciaFor
+                | SentenciaRepeat
+                | SentenciasBreak
+                | SentenciaContinue;
+
             //-------------
-            PAsignacion.Rule = ID + SASIGNAR + Operacion_relacional + SPYCOMA;
+            PAsignacion.Rule = ID + Asignacionaux
+                            ;
+
+            Asignacionaux.Rule = SASIGNAR + Operacion_relacional + SPYCOMA
+                                | SPUNTO + ID + SASIGNAR + Operacion_relacional + SPYCOMA
+                                ;
+
+            //--------------------
+            PBegin.Rule = RBEGIN + Sentencias + REND + SMain;
+
+            SMain.Rule = SPYCOMA
+                       | SPUNTO;
+
+            //---------------------
+            SentenciaIf.Rule = RIF + SPARIZQ + Operacion + SPARDER + RTHEN + Sentencias
+                             | RIF + SPARIZQ + Operacion + SPARDER + RTHEN + Sentencias + RELSE + Sentencias
+                             | RIF + SPARIZQ + Operacion + SPARDER + RTHEN + Sentencias + else_if
+                             | RIF + SPARIZQ + Operacion + SPARDER + RTHEN + Sentencias + else_if + RELSE + Sentencias
+                             ;
+
+            else_if.Rule = else_if + elif
+                        | elif
+                        | Empty
+                        ;
+
+            elif.Rule = RIF + SPARIZQ + Operacion + SPARDER + RTHEN + Sentencias;
 
             //----------------
+
+            SentenciaSwitch.Rule = RCASE + SPARIZQ + Operacion + SPARDER + ROF + Pcasos + REND + SPYCOMA;
+
+            Pcasos.Rule = Pcasos + Pcaso
+                        | Pcaso
+                        | Empty;
+
+            Pcaso.Rule = Caso + SDOSPUNTOS + Sentencias
+                    | Caso + SDOSPUNTOS + RBEGIN + Sentencias + REND + SPYCOMA;
+
+            Caso.Rule = Caso + SCOMA + Operacion
+                | Operacion
+                | Empty;
+
+            //-------------
+
+            SentenciaWhile.Rule = RWHILE + Operacion + RDO + RBEGIN + Sentencias + REND + SPYCOMA;
+
+            //-----------------------
+
+            SentenciaFor.Rule = RFOR + inicializacion + RTO + Operacion + RDO + Sentencias
+                              | RFOR + inicializacion + RTO + Operacion + RDO + RBEGIN + Sentencias + REND + SPYCOMA;
+
+            inicializacion.Rule = ID + SASIGNAR + Operacion_relacional;
+
+            //--------------------------------
+
+            SentenciaRepeat.Rule = RREPEAT + Sentencias + RUNTIL + Operacion + SPYCOMA
+                                 | RREPEAT + RBEGIN + Sentencias + REND + SPYCOMA + RUNTIL + Operacion + SPYCOMA;
+
+            //-------------------------------------
+            SentenciasBreak.Rule = RBREAK + SPYCOMA;
+
+            SentenciaContinue.Rule = RCONTINUE + SPYCOMA;
+
+
+            //--------------------------------------
+
             Operacion.Rule = Operacion + LAND + Operacion
                 | Operacion + LOR + Operacion
                 | Operacion_relacional;
@@ -172,6 +279,7 @@ namespace Proyecto1.Ejecutor.Analizador
                 | Operacion_numerica + SMENOR + Operacion_numerica
                 | Operacion_numerica + SMAYORIGUAL + Operacion_numerica
                 | Operacion_numerica + SMENORIGUAL + Operacion_numerica
+                | Operacion_numerica + SIGUAL+ Operacion_numerica
                 | Operacion_numerica;
             //--------
             Operacion_numerica.Rule = Operacion_numerica + SMAS + Operacion_numerica

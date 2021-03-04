@@ -19,3 +19,14 @@ C:\Users\Alex\Desktop\[OLC2]Proyecto1\OLC2_Proyecto1\Proyecto1\Proyecto1\obj\Deb
 C:\Users\Alex\Desktop\[OLC2]Proyecto1\OLC2_Proyecto1\Proyecto1\Proyecto1\obj\Debug\netcoreapp3.1\Proyecto1.genruntimeconfig.cache
 C:\Users\Alex\Desktop\[OLC2]Proyecto1\OLC2_Proyecto1\Proyecto1\Proyecto1\obj\Debug\netcoreapp3.1\Proyecto1.csprojAssemblyReference.cache
 C:\Users\Alex\Desktop\[OLC2]Proyecto1\OLC2_Proyecto1\Proyecto1\Proyecto1\obj\Debug\netcoreapp3.1\Proyecto1.Properties.Resources.resources
+C:\Users\Alex\Desktop\[OLC2]Proyecto1\OLC2_Proyecto1\Proyecto1\Proyecto1\bin\Debug\netcoreapp3.1\ScintillaNET.dll
+C:\Users\Alex\Desktop\[OLC2]Proyecto1\OLC2_Proyecto1\Proyecto1\Proyecto1\bin\Debug\netcoreapp3.1\runtimes\win-x64\native\License.txt
+C:\Users\Alex\Desktop\[OLC2]Proyecto1\OLC2_Proyecto1\Proyecto1\Proyecto1\bin\Debug\netcoreapp3.1\runtimes\win-x64\native\SciLexer.dll
+C:\Users\Alex\Desktop\[OLC2]Proyecto1\OLC2_Proyecto1\Proyecto1\Proyecto1\bin\Debug\netcoreapp3.1\runtimes\win-x64\native\SciLexer.exp
+C:\Users\Alex\Desktop\[OLC2]Proyecto1\OLC2_Proyecto1\Proyecto1\Proyecto1\bin\Debug\netcoreapp3.1\runtimes\win-x64\native\SciLexer.lib
+C:\Users\Alex\Desktop\[OLC2]Proyecto1\OLC2_Proyecto1\Proyecto1\Proyecto1\bin\Debug\netcoreapp3.1\runtimes\win-x64\native\version.txt
+C:\Users\Alex\Desktop\[OLC2]Proyecto1\OLC2_Proyecto1\Proyecto1\Proyecto1\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\License.txt
+C:\Users\Alex\Desktop\[OLC2]Proyecto1\OLC2_Proyecto1\Proyecto1\Proyecto1\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\SciLexer.dll
+C:\Users\Alex\Desktop\[OLC2]Proyecto1\OLC2_Proyecto1\Proyecto1\Proyecto1\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\SciLexer.exp
+C:\Users\Alex\Desktop\[OLC2]Proyecto1\OLC2_Proyecto1\Proyecto1\Proyecto1\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\SciLexer.lib
+C:\Users\Alex\Desktop\[OLC2]Proyecto1\OLC2_Proyecto1\Proyecto1\Proyecto1\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\version.txt

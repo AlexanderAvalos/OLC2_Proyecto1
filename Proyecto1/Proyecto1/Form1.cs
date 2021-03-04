@@ -45,7 +45,6 @@ namespace Proyecto1
 
             Sintactico_ejecutar sintactico = new Sintactico_ejecutar();
             string entrada = richTextBox1.Text.Trim();
-            richTextBox2.AppendText(entrada);
             sintactico.Analizar(entrada, new Gramatica_Ejecutar());
         }
 

@@ -12,7 +12,7 @@ namespace Proyecto1.Ejecutor.Modelos
         StringBuilder grafica;
         public Graficar()
         {
-            ruta = "C:/compiladores 2";
+            ruta = "C:\\compiladores2";
         }
         private void generarDot(String rdot, String rpng)
         {
@@ -27,7 +27,7 @@ namespace Proyecto1.Ejecutor.Modelos
 
         }
 
-        public void graficar(String texto)
+        public void generarimagen(String texto)
         {
             grafica = new StringBuilder();
             String rdot = ruta + "\\imagen.dot";
