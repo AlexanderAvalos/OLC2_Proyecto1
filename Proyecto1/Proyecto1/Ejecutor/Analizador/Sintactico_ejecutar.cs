@@ -10,6 +10,7 @@ using Proyecto1.Ejecutor.Analizador.Interfaces;
 using Proyecto1.Ejecutor.Modelos;
 using Proyecto1.Ejecutor.Instrucciones;
 using Proyecto1.Ejecutor.Instrucciones.Sentencias;
+using Proyecto1.Ejecutor.Instrucciones.funciones;
 
 namespace Proyecto1.Ejecutor.Analizador
 {
@@ -107,6 +108,25 @@ namespace Proyecto1.Ejecutor.Analizador
                     return PTYPE(node.ChildNodes.ElementAt(0));
                 case "PBegin":
                     return PBEGIN(node.ChildNodes.ElementAt(0));
+                case "PFunciones":
+                    return PFUNCIONES(node.ChildNodes.ElementAt(0));
+                case "PProcedure":
+                    return PPROCEDURE(node.ChildNodes.ElementAt(0));
+                case "PInstruccionNativa":
+                    return COMANDOSNATIVOS(node.ChildNodes.ElementAt(0));
+            }
+            return null;
+        }
+
+        private Instruccion COMANDOSNATIVOS(ParseTreeNode node) {
+            string produccion = node.ChildNodes.ElementAt(0).Term.Name;
+            switch (produccion)
+            {
+                case "RGRAFICAR":
+                    return new GraficarTS();
+                case "exit":
+                    return new Instruccion_Exit();
+               
             }
             return null;
         }
@@ -122,6 +142,158 @@ namespace Proyecto1.Ejecutor.Analizador
                 return null;
             }
         }
+
+        private Instruccion PPROCEDURE(ParseTreeNode nodo)
+        {
+            if (nodo.ChildNodes.Count == 3)
+            {
+                return new Instruccion_Procedimiento(nodo.ChildNodes.ElementAt(1).Token.ValueString.ToString(), PROCEDIMIENTOS2(nodo.ChildNodes.ElementAt(2)), PROCEDIMIENTOSAUX(nodo.ChildNodes.ElementAt(2)));
+            }
+
+
+            return null;
+
+        }
+
+        private LinkedList<Atributo> PROCEDIMIENTOS2(ParseTreeNode nodo)
+        {
+            if (nodo.ChildNodes.Count == 5)
+            {
+                return ATRIBUTOS(nodo.ChildNodes.ElementAt(1));
+            }
+            else
+            {
+                return null;
+            }
+        }
+        private LinkedList<Instruccion> PROCEDIMIENTOSAUX(ParseTreeNode nodo)
+        {
+            if (nodo.ChildNodes.Count == 5)
+            {
+                return PINSTRUCCIONES(nodo.ChildNodes.ElementAt(4));
+            }
+            else
+            {
+                return PINSTRUCCIONES(nodo.ChildNodes.ElementAt(1));
+            }
+        }
+        private Instruccion PFUNCIONES(ParseTreeNode nodo)
+        {
+            if (nodo.ChildNodes.Count == 3)
+            {
+                return new Instruccion_Funcion(nodo.ChildNodes.ElementAt(1).Token.ValueString.ToString(), FUNCIONES2(nodo.ChildNodes.ElementAt(2)), FUNCIONAUX(nodo.ChildNodes.ElementAt(2)), ObetenerTipo(nodo.ChildNodes.ElementAt(2)));
+            }
+
+
+            return null;
+
+        }
+        private LinkedList<Instruccion> FUNCIONAUX(ParseTreeNode nodo)
+        {
+            if (nodo.ChildNodes.Count == 7)
+            {
+                return PINSTRUCCIONES(nodo.ChildNodes.ElementAt(6));
+            }
+            else
+            {
+                return PINSTRUCCIONES(nodo.ChildNodes.ElementAt(3));
+            }
+        }
+
+        private LinkedList<Instruccion> PINSTRUCCIONES(ParseTreeNode nodo)
+        {
+            if (nodo.ChildNodes.Count == 2)
+            {
+                LinkedList<Instruccion> lista = new LinkedList<Instruccion>();
+                lista.AddLast(DECLARACION(nodo.ChildNodes.ElementAt(0)));
+                lista.AddLast(PINSTRUCCIONAUX(nodo.ChildNodes.ElementAt(1)));
+                return lista;
+            }
+            else if (nodo.ChildNodes.Count == 1)
+            {
+
+                return PINSTRUCCION(nodo.ChildNodes.ElementAt(0));
+            }
+            return null;
+        }
+        private Instruccion PINSTRUCCIONAUX(ParseTreeNode nodo)
+        {
+            return new Sentencias(SENTENCIAS(nodo.ChildNodes.ElementAt(1)));
+        }
+        private LinkedList<Instruccion> PINSTRUCCION(ParseTreeNode node)
+        {
+            return SENTENCIAS(node.ChildNodes.ElementAt(1));
+        }
+
+
+        private LinkedList<Atributo> FUNCIONES2(ParseTreeNode nodo)
+        {
+            if (nodo.ChildNodes.Count == 7)
+            {
+                return ATRIBUTOS(nodo.ChildNodes.ElementAt(1));
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private LinkedList<Atributo> ATRIBUTOS(ParseTreeNode nodo)
+        {
+            if (nodo.ChildNodes.Count == 3)
+            {
+                LinkedList<Atributo> lista = ATRIBUTOS(nodo.ChildNodes.ElementAt(0));
+                lista.AddLast(PATRIBUTO(nodo.ChildNodes.ElementAt(2)));
+                return lista;
+            }
+            else if (nodo.ChildNodes.Count == 1)
+            {
+                LinkedList<Atributo> lista = new LinkedList<Atributo>();
+                lista.AddLast(PATRIBUTO(nodo.ChildNodes.ElementAt(0)));
+                return lista;
+            }
+
+            return null;
+        }
+
+        private Atributo PATRIBUTO(ParseTreeNode nodo)
+        {
+            if (nodo.ChildNodes.Count == 2)
+            {
+                return new Atributo(PIDS(nodo.ChildNodes.ElementAt(0)), PATRIBUTOS2(nodo.ChildNodes.ElementAt(1)));
+
+            } else if (nodo.ChildNodes.Count == 3) {
+                return new Atributo(PIDS(nodo.ChildNodes.ElementAt(1)), PATRIBUTOS2(nodo.ChildNodes.ElementAt(2)));
+            }
+
+            return null;
+        }
+        private Tipo PATRIBUTOS2(ParseTreeNode nodo)
+        {
+            if (nodo.ChildNodes.Count == 2)
+            {
+                return BuscarTipo(nodo.ChildNodes.ElementAt(1));
+            }
+            else
+            {
+                return Tipo.SINTIPO;
+            }
+        }
+        private Tipo ObetenerTipo(ParseTreeNode nodo)
+        {
+
+            if (nodo.ChildNodes.Count == 7)
+            {
+                return BuscarTipo(nodo.ChildNodes.ElementAt(4));
+            }
+            else
+            {
+                return BuscarTipo(nodo.ChildNodes.ElementAt(1));
+            }
+
+
+        }
+
 
         private LinkedList<Instruccion> SENTENCIAS(ParseTreeNode nodo)
         {
@@ -163,6 +335,8 @@ namespace Proyecto1.Ejecutor.Analizador
                     return new SentenciasBreak();
                 case "SentenciaContinue":
                     return new SentenciasContinue();
+                case "PInstruccionNativa":
+                    return COMANDOSNATIVOS(node.ChildNodes.ElementAt(0));
             }
             return null;
         }
@@ -171,7 +345,7 @@ namespace Proyecto1.Ejecutor.Analizador
         {
             if (nodo.ChildNodes.Count == 5)
             {
-                return new SenteciaRepeat(POPERACION(nodo.ChildNodes.ElementAt(3)),SENTENCIAS(nodo.ChildNodes.ElementAt(1)));
+                return new SenteciaRepeat(POPERACION(nodo.ChildNodes.ElementAt(3)), SENTENCIAS(nodo.ChildNodes.ElementAt(1)));
             }
             else
             {
@@ -215,6 +389,10 @@ namespace Proyecto1.Ejecutor.Analizador
             if (nodo.ChildNodes.Count == 8)
             {
                 return new Sentencia_Case(POPERACION(nodo.ChildNodes.ElementAt(2)), PCASOS(nodo.ChildNodes.ElementAt(5)));
+            }
+            else if (nodo.ChildNodes.Count == 10)
+            {
+                return new Sentencia_Case(POPERACION(nodo.ChildNodes.ElementAt(2)), PCASOS(nodo.ChildNodes.ElementAt(5)), new tipo_else(SENTENCIAS(nodo.ChildNodes.ElementAt(7))));
             }
             return null;
         }
@@ -268,23 +446,34 @@ namespace Proyecto1.Ejecutor.Analizador
         }
         private Instruccion SENTENCIAIF(ParseTreeNode nodo)
         {
-            if (nodo.ChildNodes.Count == 6)
+            if (nodo.ChildNodes.Count == 4)
             {
-                return new Sentencia_IF(POPERACION(nodo.ChildNodes.ElementAt(2)), SENTENCIAS(nodo.ChildNodes.ElementAt(5)));
+                return new Sentencia_IF(PCONDICION(nodo.ChildNodes.ElementAt(1)), SENTENCIAS(nodo.ChildNodes.ElementAt(3)));
             }
-            else if (nodo.ChildNodes.Count == 8)
+            else if (nodo.ChildNodes.Count == 6)
             {
-                return new Sentencia_IF(POPERACION(nodo.ChildNodes.ElementAt(2)), SENTENCIAS(nodo.ChildNodes.ElementAt(5)), new tipo_else(SENTENCIAS(nodo.ChildNodes.ElementAt(7))));
+                return new Sentencia_IF(PCONDICION(nodo.ChildNodes.ElementAt(1)), SENTENCIAS(nodo.ChildNodes.ElementAt(3)), new tipo_else(SENTENCIAS(nodo.ChildNodes.ElementAt(5))));
+            }
+            else if (nodo.ChildNodes.Count == 5)
+            {
+                return new Sentencia_IF(PCONDICION(nodo.ChildNodes.ElementAt(1)), SENTENCIAS(nodo.ChildNodes.ElementAt(3)), ELSE_IF(nodo.ChildNodes.ElementAt(4)));
             }
             else if (nodo.ChildNodes.Count == 7)
             {
-                return new Sentencia_IF(POPERACION(nodo.ChildNodes.ElementAt(2)), SENTENCIAS(nodo.ChildNodes.ElementAt(5)), ELSE_IF(nodo.ChildNodes.ElementAt(6)));
-            }
-            else if (nodo.ChildNodes.Count == 9)
-            {
-                return new Sentencia_IF(POPERACION(nodo.ChildNodes.ElementAt(2)), SENTENCIAS(nodo.ChildNodes.ElementAt(5)), new tipo_else(SENTENCIAS(nodo.ChildNodes.ElementAt(7))), ELSE_IF(nodo.ChildNodes.ElementAt(6)));
+                return new Sentencia_IF(PCONDICION(nodo.ChildNodes.ElementAt(1)), SENTENCIAS(nodo.ChildNodes.ElementAt(3)), new tipo_else(SENTENCIAS(nodo.ChildNodes.ElementAt(5))), ELSE_IF(nodo.ChildNodes.ElementAt(4)));
             }
             return null;
+        }
+        private Operacion PCONDICION(ParseTreeNode nodo)
+        {
+            if (nodo.ChildNodes.Count == 3)
+            {
+                return POPERACION(nodo.ChildNodes.ElementAt(1));
+            }
+            else
+            {
+                return POPERACION(nodo.ChildNodes.ElementAt(0));
+            }
         }
 
         private LinkedList<else_if> ELSE_IF(ParseTreeNode nodo)

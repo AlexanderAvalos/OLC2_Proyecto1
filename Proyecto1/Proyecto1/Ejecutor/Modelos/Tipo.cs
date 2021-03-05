@@ -67,6 +67,7 @@ namespace Proyecto1.Ejecutor.Modelos
         OF,
         ENTERO,
         DECIMAL,
-        NOENCONTRADO
+        NOENCONTRADO,
+        SINTIPO
     }
 }

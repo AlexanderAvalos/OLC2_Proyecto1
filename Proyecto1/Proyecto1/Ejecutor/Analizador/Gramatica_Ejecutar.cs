@@ -83,7 +83,13 @@ namespace Proyecto1.Ejecutor.Analizador
                 RUNTIL = ToTerm("until"),
                 RFOR = ToTerm("for"),
                 RBREAK = ToTerm("break"),
-                RCONTINUE = ToTerm("continue")
+                RCONTINUE = ToTerm("continue"),
+                RFUNCION = ToTerm("function"),
+                RPROCEDURE = ToTerm("procedure"),
+                REXIT = ToTerm("exit"),
+                RGRAFICAR = ToTerm("graficar_ts"),
+                RWRITE = ToTerm("write"),
+                RWRITELN = ToTerm("writeln")
                 ;
             #endregion
 
@@ -136,13 +142,27 @@ namespace Proyecto1.Ejecutor.Analizador
                 //Sentencias If
                 else_if = new NonTerminal("else_if"),
                 elif = new NonTerminal("elif"),
+                Condicion = new NonTerminal("Condicion"),
                 //Sentencias Switch
                 Pcasos = new NonTerminal("Pcasos"),
                 Pcaso = new NonTerminal("Pcaso"),
                 Caso = new NonTerminal("Caso"),
                 //sentencias For
-                inicializacion = new NonTerminal("inicializacion")
-
+                inicializacion = new NonTerminal("inicializacion"),
+                //Funciones
+                PFunciones = new NonTerminal("PFunciones"),
+                PFuncion = new NonTerminal("PFuncion"),
+                PAtributos = new NonTerminal("PAtributos"),
+                PCuerpo = new NonTerminal("PCuerpo"),
+                PAtributo = new NonTerminal("PAtributo"),
+                PAtributo2 = new NonTerminal("PAtributo2"),
+                PInstrucciones = new NonTerminal("PInstrucciones"),
+                PInstruccion = new NonTerminal("PInstrucciones"),
+                //Procedimientos
+                PProcedure = new NonTerminal("PProcedure"),
+                PProcedures = new NonTerminal("PProcedures"),
+                //nativas
+                PInstruccionNativa = new NonTerminal("PInstruccionNativa")
             ;
             #endregion
 
@@ -158,6 +178,9 @@ namespace Proyecto1.Ejecutor.Analizador
                 | PDeclaracion
                 | Ptype
                 | PBegin
+                | PFunciones
+                | PProcedure
+                | PInstruccionNativa
                ;
             //-------
             Pprogram.Rule = RPROGRAM + ID + SPYCOMA;
@@ -188,6 +211,48 @@ namespace Proyecto1.Ejecutor.Analizador
 
             Pindice.Rule = Tipo
                          | Operacion_relacional + SPUNTO + SPUNTO + Operacion_relacional;
+
+            //--------------------
+            PBegin.Rule = RBEGIN + Sentencias + REND + SMain;
+
+            SMain.Rule = SPYCOMA
+                       | SPUNTO;
+
+            //----------------------------------------------------
+
+            PFunciones.Rule = RFUNCION + ID + PFuncion;
+
+            PFuncion.Rule = SPARIZQ + PAtributos + SPARDER + SDOSPUNTOS + Tipo + SPYCOMA + PInstrucciones
+                    | SDOSPUNTOS + Tipo + SPYCOMA + PInstrucciones;
+
+            PAtributos.Rule = PAtributos + SPYCOMA + PAtributo
+                | PAtributo;
+
+            PAtributo.Rule = Pids + PAtributo2
+                |RVAR+ Pids + PAtributo2; 
+
+            PAtributo2.Rule = SDOSPUNTOS + Tipo
+            | Empty;
+
+
+            PInstrucciones.Rule = PDeclaracion + PInstruccion
+                | PInstruccion;
+
+            PInstruccion.Rule = RBEGIN + Sentencias + REND + SPYCOMA;
+
+            //-----------------------------------------
+
+            PProcedure.Rule = RPROCEDURE + ID + PProcedures;
+
+            PProcedures.Rule = SPARIZQ + PAtributos + SPARDER  + SPYCOMA + PInstrucciones
+                    |  SPYCOMA + PInstrucciones;
+
+            //----------------------------------------------
+
+            PInstruccionNativa.Rule = REXIT + SPARIZQ + SPARDER + SPYCOMA
+                | RGRAFICAR + SPARIZQ + SPARDER + SPYCOMA;
+
+
             //-----------------------
             Sentencias.Rule = Sentencias + Sentencia
                             | Sentencia
@@ -200,7 +265,8 @@ namespace Proyecto1.Ejecutor.Analizador
                 | SentenciaFor
                 | SentenciaRepeat
                 | SentenciasBreak
-                | SentenciaContinue;
+                | SentenciaContinue
+                | PInstruccionNativa;
 
             //-------------
             PAsignacion.Rule = ID + Asignacionaux
@@ -210,18 +276,16 @@ namespace Proyecto1.Ejecutor.Analizador
                                 | SPUNTO + ID + SASIGNAR + Operacion_relacional + SPYCOMA
                                 ;
 
-            //--------------------
-            PBegin.Rule = RBEGIN + Sentencias + REND + SMain;
-
-            SMain.Rule = SPYCOMA
-                       | SPUNTO;
 
             //---------------------
-            SentenciaIf.Rule = RIF + SPARIZQ + Operacion + SPARDER + RTHEN + Sentencias
-                             | RIF + SPARIZQ + Operacion + SPARDER + RTHEN + Sentencias + RELSE + Sentencias
-                             | RIF + SPARIZQ + Operacion + SPARDER + RTHEN + Sentencias + else_if
-                             | RIF + SPARIZQ + Operacion + SPARDER + RTHEN + Sentencias + else_if + RELSE + Sentencias
+            SentenciaIf.Rule = RIF + Condicion + RTHEN + Sentencias
+                             | RIF + Condicion + RTHEN + Sentencias + RELSE + Sentencias
+                             | RIF + Condicion + RTHEN + Sentencias + else_if
+                             | RIF + Condicion + RTHEN + Sentencias + else_if + RELSE + Sentencias
                              ;
+
+            Condicion.Rule = SPARIZQ + Operacion + SPARDER
+                | Operacion;
 
             else_if.Rule = else_if + elif
                         | elif
@@ -232,18 +296,20 @@ namespace Proyecto1.Ejecutor.Analizador
 
             //----------------
 
-            SentenciaSwitch.Rule = RCASE + SPARIZQ + Operacion + SPARDER + ROF + Pcasos + REND + SPYCOMA;
+            SentenciaSwitch.Rule = RCASE + SPARIZQ + Operacion + SPARDER + ROF + Pcasos + REND + SPYCOMA
+                | RCASE + SPARIZQ + Operacion + SPARDER + ROF + Pcasos + RELSE + Sentencias + REND + SPYCOMA;
 
             Pcasos.Rule = Pcasos + Pcaso
                         | Pcaso
                         | Empty;
 
-            Pcaso.Rule = Caso + SDOSPUNTOS + Sentencias
+            Pcaso.Rule = Caso + SDOSPUNTOS + Sentencia
                     | Caso + SDOSPUNTOS + RBEGIN + Sentencias + REND + SPYCOMA;
 
             Caso.Rule = Caso + SCOMA + Operacion
                 | Operacion
                 | Empty;
+
 
             //-------------
 
@@ -252,7 +318,7 @@ namespace Proyecto1.Ejecutor.Analizador
             //-----------------------
 
             SentenciaFor.Rule = RFOR + inicializacion + RTO + Operacion + RDO + Sentencias
-                              | RFOR + inicializacion + RTO + Operacion + RDO + RBEGIN + Sentencias + REND + SPYCOMA;
+                              | RFOR + inicializacion + RTO + Operacion + RDO + RBEGIN + Sentencia + REND + SPYCOMA;
 
             inicializacion.Rule = ID + SASIGNAR + Operacion_relacional;
 
@@ -279,7 +345,7 @@ namespace Proyecto1.Ejecutor.Analizador
                 | Operacion_numerica + SMENOR + Operacion_numerica
                 | Operacion_numerica + SMAYORIGUAL + Operacion_numerica
                 | Operacion_numerica + SMENORIGUAL + Operacion_numerica
-                | Operacion_numerica + SIGUAL+ Operacion_numerica
+                | Operacion_numerica + SIGUAL + Operacion_numerica
                 | Operacion_numerica;
             //--------
             Operacion_numerica.Rule = Operacion_numerica + SMAS + Operacion_numerica
