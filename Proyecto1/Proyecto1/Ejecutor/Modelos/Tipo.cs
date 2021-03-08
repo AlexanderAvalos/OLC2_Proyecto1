@@ -68,6 +68,8 @@ namespace Proyecto1.Ejecutor.Modelos
         ENTERO,
         DECIMAL,
         NOENCONTRADO,
-        SINTIPO
+        SINTIPO,
+        NEGATIVO,
+        
     }
 }

@@ -6,16 +6,21 @@ using System.Text;
 
 namespace Proyecto1.Ejecutor.Instrucciones.Sentencias
 {
-    class tipo_else:Instruccion
+    class SentenciaLlamar : Instruccion
     {
-        LinkedList<Instruccion> lst_else;
+        string id;
+        LinkedList<Operacion> lst_atributos;
 
-        public tipo_else(LinkedList<Instruccion> lst_else)
+        public SentenciaLlamar(string id)
         {
-            this.lst_else = lst_else;
+            this.id = id;
         }
 
-        public LinkedList<Instruccion> Lst_else { get => lst_else; set => lst_else = value; }
+        public SentenciaLlamar(string id, LinkedList<Operacion> lst_atributos)
+        {
+            this.id = id;
+            this.lst_atributos = lst_atributos;
+        }
 
         public object Ejecutar(TablaDeSimbolos tabla)
         {

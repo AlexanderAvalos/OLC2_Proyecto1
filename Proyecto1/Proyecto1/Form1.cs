@@ -20,9 +20,11 @@ namespace Proyecto1
         int caracter;
 
         List<string> salida = new List<string>();
+     
         public Form1()
         {
             InitializeComponent();
+            Program.consola = richTextBox2;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -32,12 +34,14 @@ namespace Proyecto1
 
         private void button2_Click(object sender, EventArgs e)
         {
-
+            Console.WriteLine("hola");
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
+            richTextBox2.Clear();
             ejecutar();
+            
         }
 
         private void ejecutar()
@@ -112,6 +116,11 @@ namespace Proyecto1
             {
                 e.Graphics.DrawString("1", richTextBox1.Font, Brushes.Blue, pictureBox1.Width - (e.Graphics.MeasureString("1", richTextBox1.Font).Width + 10), altura);
             }
+        }
+
+        private void richTextBox2_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

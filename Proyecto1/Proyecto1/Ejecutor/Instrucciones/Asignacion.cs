@@ -26,6 +26,7 @@ namespace Proyecto1.Ejecutor.Instrucciones
         }
 
         public Object Ejecutar(TablaDeSimbolos tabla) {
+
             tabla.setValor(id,valor.Ejecutar(tabla));
             return null;
         }

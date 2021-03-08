@@ -28,10 +28,6 @@ namespace Proyecto1.Ejecutor.Modelos
             return null;
         }
 
-        public Tipo getTipo(string id)
-        {
-            return getTipo(id, this);
-        }
 
         private Tipo getTipo(string id, TablaDeSimbolos nodo)
         {
@@ -47,10 +43,6 @@ namespace Proyecto1.Ejecutor.Modelos
             return Tipo.NOENCONTRADO;
         }
 
-        public string tipoAsignado(string id)
-        {
-            return tipoAsignado(id, this);
-        }
 
         private string tipoAsignado(string id, TablaDeSimbolos nodo)
         {
@@ -64,12 +56,6 @@ namespace Proyecto1.Ejecutor.Modelos
             if (nodo.padre != null) return tipoAsignado(id, nodo);
             else
                 return "No Hay ninguna coincidencia";
-        }
-
-        public bool setValorAtributo(string id, object valor, Stack<string> atributos)
-        {
-            object val = getValor(id);
-            return setValorAtributo(val, valor, atributos);
         }
 
         public bool setValorAtributo(object valor2, object valor, Stack<string> atributos)
@@ -95,11 +81,7 @@ namespace Proyecto1.Ejecutor.Modelos
             return false;
         }
 
-        public object getValorAtributo(string id, Stack<string> atributos)
-        {
-            object valor = getValor(id);
-            return getValorAtributo(valor, atributos);
-        }
+
         public object getValorAtributo(object valor, Stack<string> atributos)
         {
             List<Tipo_Objeto> val = (List<Tipo_Objeto>)valor;
@@ -140,20 +122,10 @@ namespace Proyecto1.Ejecutor.Modelos
             else
                 return false;
         }
-
-        public bool existID_AA(string id)
-        {
-            foreach (Simbolo item in this)
-            {
-                if (item.Id.ToLower().Equals(id.ToLower())) return true;
-            }
-            return false;
-        }
-
-        public void agregarPadre(TablaDeSimbolos ts)
-        {
+        public void agregarPadre(TablaDeSimbolos ts) {
             this.padre = ts;
         }
+     
 
         public void setValor(string id, Object valor)
         {
@@ -167,7 +139,7 @@ namespace Proyecto1.Ejecutor.Modelos
             {
                 if (s.Id.ToLower().Equals(id.ToLower()))
                 {
-                    if (s.Tipo == Tipo.ENTERO)
+                    if (s.Tipo == Tipo.INTEGER)
                     {
                         s.Valor = Convert.ToDouble(valor);
                     }
@@ -177,6 +149,10 @@ namespace Proyecto1.Ejecutor.Modelos
 
                     }
                     else if (s.Tipo == Tipo.CADENA)
+                    {
+                        s.Valor = valor.ToString();
+                    }
+                    else if (s.Tipo == Tipo.STRING)
                     {
                         s.Valor = valor.ToString();
                     }

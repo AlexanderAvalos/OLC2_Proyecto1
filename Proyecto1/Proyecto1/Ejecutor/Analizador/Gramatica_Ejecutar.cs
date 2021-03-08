@@ -119,6 +119,7 @@ namespace Proyecto1.Ejecutor.Analizador
                 //operacion_numerica
                 Operacion = new NonTerminal("Operacion"),
                 Valor = new NonTerminal("Valor"),
+                Valores = new NonTerminal("Valores"),
                 // array
                 Parray = new NonTerminal("Parray"),
                 Pindice = new NonTerminal("Pindice"),
@@ -137,6 +138,8 @@ namespace Proyecto1.Ejecutor.Analizador
                 SentenciaRepeat = new NonTerminal("SentenciaRepeat"),
                 SentenciasBreak = new NonTerminal("SentenciasBreak"),
                 SentenciaContinue = new NonTerminal("SentenciaContinue"),
+                SentenciaWriteln = new NonTerminal("SentenciaWriteln"),
+                SentenciaWrite = new NonTerminal("SentenciaWrite"),
                 //Asignacion
                 Asignacionaux = new NonTerminal("AsignacionAux"),
                 //Sentencias If
@@ -158,11 +161,13 @@ namespace Proyecto1.Ejecutor.Analizador
                 PAtributo2 = new NonTerminal("PAtributo2"),
                 PInstrucciones = new NonTerminal("PInstrucciones"),
                 PInstruccion = new NonTerminal("PInstrucciones"),
+                CallMetodo = new NonTerminal("CallMetodo"),
                 //Procedimientos
                 PProcedure = new NonTerminal("PProcedure"),
                 PProcedures = new NonTerminal("PProcedures"),
                 //nativas
-                PInstruccionNativa = new NonTerminal("PInstruccionNativa")
+                PInstruccionNativa = new NonTerminal("PInstruccionNativa"),
+                Concatenar = new NonTerminal("Concatenar");
             ;
             #endregion
 
@@ -180,7 +185,6 @@ namespace Proyecto1.Ejecutor.Analizador
                 | PBegin
                 | PFunciones
                 | PProcedure
-                | PInstruccionNativa
                ;
             //-------
             Pprogram.Rule = RPROGRAM + ID + SPYCOMA;
@@ -223,13 +227,14 @@ namespace Proyecto1.Ejecutor.Analizador
             PFunciones.Rule = RFUNCION + ID + PFuncion;
 
             PFuncion.Rule = SPARIZQ + PAtributos + SPARDER + SDOSPUNTOS + Tipo + SPYCOMA + PInstrucciones
-                    | SDOSPUNTOS + Tipo + SPYCOMA + PInstrucciones;
+                    | SDOSPUNTOS + Tipo + SPYCOMA + PInstrucciones
+                    | SPARIZQ  + SPARDER  + SDOSPUNTOS + Tipo + SPYCOMA + PInstrucciones;
 
             PAtributos.Rule = PAtributos + SPYCOMA + PAtributo
                 | PAtributo;
 
             PAtributo.Rule = Pids + PAtributo2
-                |RVAR+ Pids + PAtributo2; 
+                | RVAR + Pids + PAtributo2;
 
             PAtributo2.Rule = SDOSPUNTOS + Tipo
             | Empty;
@@ -244,14 +249,25 @@ namespace Proyecto1.Ejecutor.Analizador
 
             PProcedure.Rule = RPROCEDURE + ID + PProcedures;
 
-            PProcedures.Rule = SPARIZQ + PAtributos + SPARDER  + SPYCOMA + PInstrucciones
-                    |  SPYCOMA + PInstrucciones;
+            PProcedures.Rule = SPARIZQ + PAtributos + SPARDER + SPYCOMA + PInstrucciones
+                    | SPYCOMA + PInstrucciones
+                    | SPARIZQ + SPARDER + SPYCOMA+ PInstrucciones ;
 
             //----------------------------------------------
 
             PInstruccionNativa.Rule = REXIT + SPARIZQ + SPARDER + SPYCOMA
-                | RGRAFICAR + SPARIZQ + SPARDER + SPYCOMA;
+                | RGRAFICAR + SPARIZQ + SPARDER + SPYCOMA
+                | SentenciaWrite
+                | SentenciaWriteln;
 
+            SentenciaWrite.Rule = RWRITE + SPARIZQ + Operacion + SCOMA + Valores + SPARDER + SPYCOMA
+                | RWRITE + SPARIZQ + Operacion + SPARDER + SPYCOMA;
+
+
+            SentenciaWriteln.Rule = RWRITELN + SPARIZQ + Operacion + SCOMA + Valores + SPARDER + SPYCOMA
+            | RWRITELN + SPARIZQ + Operacion + SPARDER + SPYCOMA;
+
+       
 
             //-----------------------
             Sentencias.Rule = Sentencias + Sentencia
@@ -266,7 +282,8 @@ namespace Proyecto1.Ejecutor.Analizador
                 | SentenciaRepeat
                 | SentenciasBreak
                 | SentenciaContinue
-                | PInstruccionNativa;
+                | PInstruccionNativa
+                | CallMetodo;
 
             //-------------
             PAsignacion.Rule = ID + Asignacionaux
@@ -300,15 +317,13 @@ namespace Proyecto1.Ejecutor.Analizador
                 | RCASE + SPARIZQ + Operacion + SPARDER + ROF + Pcasos + RELSE + Sentencias + REND + SPYCOMA;
 
             Pcasos.Rule = Pcasos + Pcaso
-                        | Pcaso
-                        | Empty;
+                        | Pcaso;
 
             Pcaso.Rule = Caso + SDOSPUNTOS + Sentencia
                     | Caso + SDOSPUNTOS + RBEGIN + Sentencias + REND + SPYCOMA;
 
             Caso.Rule = Caso + SCOMA + Operacion
-                | Operacion
-                | Empty;
+                | Operacion;
 
 
             //-------------
@@ -332,6 +347,10 @@ namespace Proyecto1.Ejecutor.Analizador
 
             SentenciaContinue.Rule = RCONTINUE + SPYCOMA;
 
+            //--------------------------------------
+            CallMetodo.Rule = ID + SPARIZQ + SPARDER + SPYCOMA
+                | ID + SPARIZQ + Valores + SPARDER + SPYCOMA;
+
 
             //--------------------------------------
 
@@ -353,8 +372,10 @@ namespace Proyecto1.Ejecutor.Analizador
                 | Operacion_numerica + SDIVISION + Operacion_numerica
                 | Operacion_numerica + SMULTIPLICACION + Operacion_numerica
                 | Operacion_numerica + SMODULO + Operacion_numerica
+                | SMENOS + Operacion_numerica
                 | SPARIZQ + Operacion + SPARDER
                 | ID + SPARIZQ + SPARDER
+                | ID + SPARIZQ + Valores + SPARDER
                 | Valor;
             //-----------
             Tipo.Rule = VINTEGER
@@ -371,6 +392,9 @@ namespace Proyecto1.Ejecutor.Analizador
                         | CADENA
                         | VFALSE
                         | VTRUE;
+
+            Valores.Rule = Valores + SCOMA + Operacion
+                | Operacion;
 
 
             this.Root = S;

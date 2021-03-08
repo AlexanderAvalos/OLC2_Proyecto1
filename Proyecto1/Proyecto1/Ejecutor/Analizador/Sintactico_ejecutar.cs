@@ -11,6 +11,7 @@ using Proyecto1.Ejecutor.Modelos;
 using Proyecto1.Ejecutor.Instrucciones;
 using Proyecto1.Ejecutor.Instrucciones.Sentencias;
 using Proyecto1.Ejecutor.Instrucciones.funciones;
+using System.Windows.Forms;
 
 namespace Proyecto1.Ejecutor.Analizador
 {
@@ -18,6 +19,7 @@ namespace Proyecto1.Ejecutor.Analizador
     {
         public List<string> salida = new List<string>();
         private int indice_nodo = 0;
+       
         public ParseTreeNode Analizar(string entrada, Grammar gramatica)
         {
             LanguageData lenguaje = new LanguageData(gramatica);
@@ -114,21 +116,82 @@ namespace Proyecto1.Ejecutor.Analizador
                     return PPROCEDURE(node.ChildNodes.ElementAt(0));
                 case "PInstruccionNativa":
                     return COMANDOSNATIVOS(node.ChildNodes.ElementAt(0));
+
             }
             return null;
         }
+        private Instruccion LLAMARMETODO(ParseTreeNode nodo)
+        {
+            if (nodo.ChildNodes.Count == 4)
+            {
+                return new SentenciaLlamar(nodo.ChildNodes.ElementAt(0).Token.ValueString.ToString());
+            }
+            else
+            {
+                return new SentenciaLlamar(nodo.ChildNodes.ElementAt(0).Token.ValueString.ToString(), VALORES(nodo.ChildNodes.ElementAt(2)));
+            }
+        }
 
-        private Instruccion COMANDOSNATIVOS(ParseTreeNode node) {
+        private Instruccion COMANDOSNATIVOS(ParseTreeNode node)
+        {
             string produccion = node.ChildNodes.ElementAt(0).Term.Name;
             switch (produccion)
             {
-                case "RGRAFICAR":
+                case "graficar_ts":
                     return new GraficarTS();
                 case "exit":
                     return new Instruccion_Exit();
-               
+                case "SentenciaWrite":
+                    return SENTENCIAWRITE(node.ChildNodes.ElementAt(0));
+                case "SentenciaWriteln":
+                    return SENTENCIAWRITELN(node.ChildNodes.ElementAt(0));
+
+
             }
             return null;
+        }
+        private Instruccion SENTENCIAWRITE(ParseTreeNode nodo)
+        {
+            if (nodo.ChildNodes.Count == 7)
+            {
+                return new SentenciaWrite(POPERACION(nodo.ChildNodes.ElementAt(2)), VALORES(nodo.ChildNodes.ElementAt(4)));
+            }
+            else
+            {
+                return new SentenciaWrite(POPERACION(nodo.ChildNodes.ElementAt(2)));
+            }
+        }
+
+        private LinkedList<Operacion> VALORES(ParseTreeNode nodo)
+        {
+            if (nodo.ChildNodes.Count == 3)
+            {
+                LinkedList<Operacion> lista = VALORES(nodo.ChildNodes.ElementAt(0));
+                lista.AddLast(POPERACION(nodo.ChildNodes.ElementAt(2)));
+                return lista;
+            }
+            else if (nodo.ChildNodes.Count == 1)
+            {
+                LinkedList<Operacion> lista = new LinkedList<Operacion>();
+                lista.AddLast(POPERACION(nodo.ChildNodes.ElementAt(0)));
+                return lista;
+            }
+
+            return null;
+        }
+
+
+
+        private Instruccion SENTENCIAWRITELN(ParseTreeNode nodo)
+        {
+            if (nodo.ChildNodes.Count == 7)
+            {
+                return new SentenciaWriteln(POPERACION(nodo.ChildNodes.ElementAt(2)), VALORES(nodo.ChildNodes.ElementAt(4)));
+            }
+            else
+            {
+                return new SentenciaWriteln(POPERACION(nodo.ChildNodes.ElementAt(2)));
+            }
         }
 
         private Instruccion PBEGIN(ParseTreeNode nodo)
@@ -172,9 +235,13 @@ namespace Proyecto1.Ejecutor.Analizador
             {
                 return PINSTRUCCIONES(nodo.ChildNodes.ElementAt(4));
             }
-            else
+            else if (nodo.ChildNodes.Count == 2)
             {
                 return PINSTRUCCIONES(nodo.ChildNodes.ElementAt(1));
+            }
+            else
+            {
+                return PINSTRUCCIONES(nodo.ChildNodes.ElementAt(3));
             }
         }
         private Instruccion PFUNCIONES(ParseTreeNode nodo)
@@ -194,9 +261,13 @@ namespace Proyecto1.Ejecutor.Analizador
             {
                 return PINSTRUCCIONES(nodo.ChildNodes.ElementAt(6));
             }
-            else
+            else if (nodo.ChildNodes.Count == 4)
             {
                 return PINSTRUCCIONES(nodo.ChildNodes.ElementAt(3));
+            }
+            else
+            {
+                return PINSTRUCCIONES(nodo.ChildNodes.ElementAt(5));
             }
         }
 
@@ -262,7 +333,9 @@ namespace Proyecto1.Ejecutor.Analizador
             {
                 return new Atributo(PIDS(nodo.ChildNodes.ElementAt(0)), PATRIBUTOS2(nodo.ChildNodes.ElementAt(1)));
 
-            } else if (nodo.ChildNodes.Count == 3) {
+            }
+            else if (nodo.ChildNodes.Count == 3)
+            {
                 return new Atributo(PIDS(nodo.ChildNodes.ElementAt(1)), PATRIBUTOS2(nodo.ChildNodes.ElementAt(2)));
             }
 
@@ -286,14 +359,17 @@ namespace Proyecto1.Ejecutor.Analizador
             {
                 return BuscarTipo(nodo.ChildNodes.ElementAt(4));
             }
-            else
+            else if (nodo.ChildNodes.Count == 4)
             {
                 return BuscarTipo(nodo.ChildNodes.ElementAt(1));
+            }
+            else
+            {
+                return BuscarTipo(nodo.ChildNodes.ElementAt(3));
             }
 
 
         }
-
 
         private LinkedList<Instruccion> SENTENCIAS(ParseTreeNode nodo)
         {
@@ -337,6 +413,8 @@ namespace Proyecto1.Ejecutor.Analizador
                     return new SentenciasContinue();
                 case "PInstruccionNativa":
                     return COMANDOSNATIVOS(node.ChildNodes.ElementAt(0));
+                case "CallMetodo":
+                    return LLAMARMETODO(node.ChildNodes.ElementAt(0));
             }
             return null;
         }
@@ -419,7 +497,7 @@ namespace Proyecto1.Ejecutor.Analizador
         {
             if (nodo.ChildNodes.Count == 3)
             {
-                return new Caso(CASOS(nodo.ChildNodes.ElementAt(0)), SENTENCIAS(nodo.ChildNodes.ElementAt(2)));
+                return new Caso(CASOS(nodo.ChildNodes.ElementAt(0)), SENTENCIA(nodo.ChildNodes.ElementAt(2)));
             }
             else if (nodo.ChildNodes.Count == 6)
             {
@@ -531,7 +609,7 @@ namespace Proyecto1.Ejecutor.Analizador
             }
             return null;
         }
-
+       
         private Instruccion DECLARACION(ParseTreeNode nodo)
         {
             LinkedList<Instruccion> lst_declaracione = new LinkedList<Instruccion>();
@@ -636,26 +714,35 @@ namespace Proyecto1.Ejecutor.Analizador
                         }
                         else
                         {
-                            return null;
+                            return new Operacion(nodo.ChildNodes.ElementAt(0).Token.ValueString.ToString());
                         }
                 }
             }
-            return PVALOR(nodo.ChildNodes.ElementAt(0));
+            else if (nodo.ChildNodes.Count == 2)
+            {
+                return new Operacion(Tipo.NEGATIVO, OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(1)));
+            } else if (nodo.ChildNodes.Count == 4) {
+                return new Operacion(nodo.ChildNodes.ElementAt(0).Token.ValueString.ToString(), VALORES(nodo.ChildNodes.ElementAt(2)));
+            }
+            else
+            {
+                return PVALOR(nodo.ChildNodes.ElementAt(0));
+            }
         }
 
         private Operacion POPERACION(ParseTreeNode nodo)
         {
             if (nodo.ChildNodes.Count == 3)
             {
-                string operador = nodo.ChildNodes.ElementAt(1).Token.ValueString.ToString();
+                string operador = nodo.ChildNodes.ElementAt(1).Term.Name;
                 switch (operador)
                 {
-                    case "AND":
-                        return new Operacion(Tipo.AND, OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(0)), OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(2)));
-                    case "OR":
-                        return new Operacion(Tipo.OR, OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(0)), OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(2)));
-                    case "NOT":
-                        return new Operacion(Tipo.NOT, OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(0)), OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(2)));
+                    case "and":
+                        return new Operacion(Tipo.AND, POPERACION(nodo.ChildNodes.ElementAt(0)), POPERACION(nodo.ChildNodes.ElementAt(2)));
+                    case "or":
+                        return new Operacion(Tipo.OR, POPERACION(nodo.ChildNodes.ElementAt(0)), POPERACION(nodo.ChildNodes.ElementAt(2)));
+                    case "not":
+                        return new Operacion(Tipo.NOT, POPERACION(nodo.ChildNodes.ElementAt(0)), POPERACION(nodo.ChildNodes.ElementAt(2)));
                 }
             }
             return OPERACION_RELACIONAL(nodo.ChildNodes.ElementAt(0));

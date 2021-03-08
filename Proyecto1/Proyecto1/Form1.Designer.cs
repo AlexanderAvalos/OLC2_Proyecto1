@@ -92,6 +92,7 @@ namespace Proyecto1
             this.richTextBox2.Size = new System.Drawing.Size(522, 144);
             this.richTextBox2.TabIndex = 2;
             this.richTextBox2.Text = "";
+            this.richTextBox2.TextChanged += new System.EventHandler(this.richTextBox2_TextChanged);
             // 
             // Cargar
             // 
@@ -403,7 +404,7 @@ namespace Proyecto1
         #endregion
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.RichTextBox richTextBox2;
-        private System.Windows.Forms.Button Cargar;
+        private System.Windows.Forms.Button Cargar; 
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button5;

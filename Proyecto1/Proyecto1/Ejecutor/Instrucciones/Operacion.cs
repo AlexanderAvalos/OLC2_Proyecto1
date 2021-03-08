@@ -12,6 +12,10 @@ namespace Proyecto1.Ejecutor.Instrucciones
         private Operacion operadorIzq;
         private Operacion operadorDer;
         private Object valor;
+        private string id_funciones;
+        private LinkedList<Operacion> lst_atributos;
+
+        public object Valor { get => valor; set => valor = value; }
 
         public Operacion(Tipo tipo_operacion, Operacion operadorIzq)
         {
@@ -43,11 +47,22 @@ namespace Proyecto1.Ejecutor.Instrucciones
             this.tipo_operacion = tipo_operacion;
         }
 
+        public Operacion(string id_funciones, LinkedList<Operacion> lst_atributos)
+        {
+            this.id_funciones = id_funciones;
+            this.lst_atributos = lst_atributos;
+        }
+
+        public Operacion(string id_funciones)
+        {
+            this.id_funciones = id_funciones;
+        }
+
         public Object Ejecutar(TablaDeSimbolos tabla)
         {
             if (tipo_operacion == Tipo.MAS)
             {
-             
+
                 return (Double)operadorIzq.Ejecutar(tabla) + (Double)operadorDer.Ejecutar(tabla);
             }
             else if (tipo_operacion == Tipo.MENOS)
@@ -82,29 +97,25 @@ namespace Proyecto1.Ejecutor.Instrucciones
             {
                 return (Double)operadorIzq.Ejecutar(tabla) <= (Double)operadorDer.Ejecutar(tabla);
             }
-            else if (tipo_operacion == Tipo.MENOR)
-            {
-                return (Double)operadorIzq.Ejecutar(tabla) < (Double)operadorDer.Ejecutar(tabla);
-            }
             else if (tipo_operacion == Tipo.DIFERENTE)
             {
                 return (Double)operadorIzq.Ejecutar(tabla) != (Double)operadorDer.Ejecutar(tabla);
             }
             else if (tipo_operacion == Tipo.IGUAL)
             {
-                return (Boolean)operadorIzq.Ejecutar(tabla) == (Boolean)operadorDer.Ejecutar(tabla);
+                return ((Double)operadorIzq.Ejecutar(tabla) == (Double)operadorDer.Ejecutar(tabla));
             }
             else if (tipo_operacion == Tipo.AND)
             {
-                return (Boolean)operadorIzq.Ejecutar(tabla) && (Boolean)operadorDer.Ejecutar(tabla);
+                return ((bool)operadorIzq.Ejecutar(tabla)) && ((bool)operadorDer.Ejecutar(tabla));
             }
             else if (tipo_operacion == Tipo.OR)
             {
-                return (Boolean)operadorIzq.Ejecutar(tabla) || (Boolean)operadorDer.Ejecutar(tabla);
+                return ((bool)operadorIzq.Ejecutar(tabla)) || ((bool)operadorDer.Ejecutar(tabla));
             }
             else if (tipo_operacion == Tipo.ENTERO)
             {
-                return int.Parse(valor.ToString());
+                return Double.Parse(valor.ToString());
             }
             else if (tipo_operacion == Tipo.DECIMAL)
             {
@@ -112,11 +123,11 @@ namespace Proyecto1.Ejecutor.Instrucciones
             }
             else if (tipo_operacion == Tipo.FALSE)
             {
-                return Boolean.Parse(valor.ToString());
+                return Convert.ToBoolean(valor);
             }
             else if (tipo_operacion == Tipo.TRUE)
             {
-                return Boolean.Parse(valor.ToString());
+                return Convert.ToBoolean(valor);
             }
             else if (tipo_operacion == Tipo.CADENA)
             {

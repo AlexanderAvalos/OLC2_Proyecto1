@@ -17,6 +17,10 @@ namespace Proyecto1.Ejecutor.Instrucciones
 
         public object Ejecutar(TablaDeSimbolos tabla)
         {
+            foreach (Instruccion item in lst_sentencias)
+            {
+                item.Ejecutar(tabla);
+            }
             return null;
         }
     }

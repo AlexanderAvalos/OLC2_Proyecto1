@@ -22,5 +22,6 @@ namespace Proyecto1
             Application.Run(new Form1());
         }
         public static Dictionary<string, TablaDeSimbolos> heap = new Dictionary<string, TablaDeSimbolos>();
+        public static RichTextBox consola = new RichTextBox();
     }
 }

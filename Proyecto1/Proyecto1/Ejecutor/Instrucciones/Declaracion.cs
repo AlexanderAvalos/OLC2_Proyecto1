@@ -30,9 +30,31 @@ namespace Proyecto1.Ejecutor.Instrucciones
         {
             foreach (var item in id)
             {
-                tabla.AddLast(new Simbolo(tipo, item));
+                if (valor != null)
+                {
+                    tabla.AddLast(new Simbolo(tipo, item, valor.Valor));
+                }
+                else {
+                    tabla.AddLast(new Simbolo(tipo, item, AsignarValor(tipo)));
+                }
             }
             return null;
+        }
+
+        private string AsignarValor(Tipo tipo)
+        {
+            switch (tipo)
+            {
+                case Tipo.INTEGER:
+                    return "0";
+                case Tipo.REAL:
+                    return "0.0";
+                case Tipo.BOOLEAN:
+                    return "false";
+                case Tipo.STRING:
+                    return " ";
+            }
+            return "null";
         }
     }
 }

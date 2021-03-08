@@ -8,7 +8,7 @@ namespace Proyecto1.Ejecutor.Instrucciones.Sentencias
 {
     class else_if : Instruccion
     {
-        Operacion condicion;
+        private Operacion condicion;
         LinkedList<Instruccion> lst_if;
 
         public else_if(Operacion condicion, LinkedList<Instruccion> lst_if)
@@ -16,6 +16,9 @@ namespace Proyecto1.Ejecutor.Instrucciones.Sentencias
             this.condicion = condicion;
             this.lst_if = lst_if;
         }
+
+        public Operacion Condicion { get => condicion; set => condicion = value; }
+        public LinkedList<Instruccion> Lst_if { get => lst_if; set => lst_if = value; }
 
         public object Ejecutar(TablaDeSimbolos tabla)
         {
