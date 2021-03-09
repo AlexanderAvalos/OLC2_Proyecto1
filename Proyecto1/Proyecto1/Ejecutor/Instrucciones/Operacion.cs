@@ -113,6 +113,25 @@ namespace Proyecto1.Ejecutor.Instrucciones
             {
                 return ((bool)operadorIzq.Ejecutar(tabla)) || ((bool)operadorDer.Ejecutar(tabla));
             }
+            else if (tipo_operacion == Tipo.INCREMENETO)
+            {
+                Double aux;
+
+                aux = (Double)tabla.getValor(valor.ToString());
+                tabla.setValor(valor.ToString(), aux + 1);
+                return aux;
+
+
+            }
+            else if (tipo_operacion == Tipo.DECREMENTO)
+            {
+                Double aux;
+
+                aux = (Double)tabla.getValor(valor.ToString());
+                tabla.setValor(valor.ToString(), aux - 1);
+                return aux;
+
+            }
             else if (tipo_operacion == Tipo.ENTERO)
             {
                 return Double.Parse(valor.ToString());

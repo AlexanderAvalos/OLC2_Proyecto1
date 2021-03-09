@@ -25,6 +25,10 @@ namespace Proyecto1.Ejecutor.Instrucciones
             this.valor = valor;
         }
 
+        public string Id { get => id; set => id = value; }
+        public string Objeto { get => objeto; set => objeto = value; }
+        internal Operacion Valor { get => valor; set => valor = value; }
+
         public Object Ejecutar(TablaDeSimbolos tabla) {
 
             tabla.setValor(id,valor.Ejecutar(tabla));

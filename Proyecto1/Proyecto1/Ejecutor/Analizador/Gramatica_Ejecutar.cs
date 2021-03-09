@@ -228,7 +228,7 @@ namespace Proyecto1.Ejecutor.Analizador
 
             PFuncion.Rule = SPARIZQ + PAtributos + SPARDER + SDOSPUNTOS + Tipo + SPYCOMA + PInstrucciones
                     | SDOSPUNTOS + Tipo + SPYCOMA + PInstrucciones
-                    | SPARIZQ  + SPARDER  + SDOSPUNTOS + Tipo + SPYCOMA + PInstrucciones;
+                    | SPARIZQ + SPARDER + SDOSPUNTOS + Tipo + SPYCOMA + PInstrucciones;
 
             PAtributos.Rule = PAtributos + SPYCOMA + PAtributo
                 | PAtributo;
@@ -251,7 +251,7 @@ namespace Proyecto1.Ejecutor.Analizador
 
             PProcedures.Rule = SPARIZQ + PAtributos + SPARDER + SPYCOMA + PInstrucciones
                     | SPYCOMA + PInstrucciones
-                    | SPARIZQ + SPARDER + SPYCOMA+ PInstrucciones ;
+                    | SPARIZQ + SPARDER + SPYCOMA + PInstrucciones;
 
             //----------------------------------------------
 
@@ -267,7 +267,7 @@ namespace Proyecto1.Ejecutor.Analizador
             SentenciaWriteln.Rule = RWRITELN + SPARIZQ + Operacion + SCOMA + Valores + SPARDER + SPYCOMA
             | RWRITELN + SPARIZQ + Operacion + SPARDER + SPYCOMA;
 
-       
+
 
             //-----------------------
             Sentencias.Rule = Sentencias + Sentencia
@@ -333,7 +333,7 @@ namespace Proyecto1.Ejecutor.Analizador
             //-----------------------
 
             SentenciaFor.Rule = RFOR + inicializacion + RTO + Operacion + RDO + Sentencias
-                              | RFOR + inicializacion + RTO + Operacion + RDO + RBEGIN + Sentencia + REND + SPYCOMA;
+                              | RFOR + inicializacion + RTO + Operacion + RDO + RBEGIN + Sentencias + REND + SPYCOMA;
 
             inicializacion.Rule = ID + SASIGNAR + Operacion_relacional;
 

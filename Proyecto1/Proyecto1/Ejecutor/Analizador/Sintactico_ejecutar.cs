@@ -19,7 +19,7 @@ namespace Proyecto1.Ejecutor.Analizador
     {
         public List<string> salida = new List<string>();
         private int indice_nodo = 0;
-       
+
         public ParseTreeNode Analizar(string entrada, Grammar gramatica)
         {
             LanguageData lenguaje = new LanguageData(gramatica);
@@ -609,7 +609,7 @@ namespace Proyecto1.Ejecutor.Analizador
             }
             return null;
         }
-       
+
         private Instruccion DECLARACION(ParseTreeNode nodo)
         {
             LinkedList<Instruccion> lst_declaracione = new LinkedList<Instruccion>();
@@ -721,7 +721,9 @@ namespace Proyecto1.Ejecutor.Analizador
             else if (nodo.ChildNodes.Count == 2)
             {
                 return new Operacion(Tipo.NEGATIVO, OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(1)));
-            } else if (nodo.ChildNodes.Count == 4) {
+            }
+            else if (nodo.ChildNodes.Count == 4)
+            {
                 return new Operacion(nodo.ChildNodes.ElementAt(0).Token.ValueString.ToString(), VALORES(nodo.ChildNodes.ElementAt(2)));
             }
             else

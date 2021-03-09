@@ -70,6 +70,8 @@ namespace Proyecto1.Ejecutor.Modelos
         NOENCONTRADO,
         SINTIPO,
         NEGATIVO,
+        INCREMENETO,
+        DECREMENTO,
         
     }
 }

@@ -23,5 +23,27 @@ namespace Proyecto1
         }
         public static Dictionary<string, TablaDeSimbolos> heap = new Dictionary<string, TablaDeSimbolos>();
         public static RichTextBox consola = new RichTextBox();
+
+        public static Tipo getTipo(string name)
+        {
+            Tipo tipo = Tipo.OBJECT;
+            switch (name)
+            {
+                case "INTEGER":
+                    tipo = Tipo.ENTERO;
+                    break;
+                case "double":
+                    tipo = Tipo.DECIMAL;
+                    break;
+                case "string":
+                    tipo = Tipo.CADENA;
+                    break;
+                case "boolean":
+                    tipo = Tipo.BOOLEAN;
+                    break;
+                
+            }
+            return tipo;
+        }
     }
 }

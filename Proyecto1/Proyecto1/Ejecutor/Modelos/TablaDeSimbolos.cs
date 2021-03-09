@@ -28,7 +28,12 @@ namespace Proyecto1.Ejecutor.Modelos
             return null;
         }
 
+        public Tipo getTipo(string id)
+        {
+            return getTipo(id, this);
+        }
 
+       
         private Tipo getTipo(string id, TablaDeSimbolos nodo)
         {
 
@@ -80,7 +85,7 @@ namespace Proyecto1.Ejecutor.Modelos
             }
             return false;
         }
-
+   
 
         public object getValorAtributo(object valor, Stack<string> atributos)
         {
@@ -122,10 +127,11 @@ namespace Proyecto1.Ejecutor.Modelos
             else
                 return false;
         }
-        public void agregarPadre(TablaDeSimbolos ts) {
+        public void agregarPadre(TablaDeSimbolos ts)
+        {
             this.padre = ts;
         }
-     
+
 
         public void setValor(string id, Object valor)
         {
