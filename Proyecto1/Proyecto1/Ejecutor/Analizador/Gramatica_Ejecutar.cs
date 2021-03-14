@@ -51,9 +51,10 @@ namespace Proyecto1.Ejecutor.Analizador
                 SPUNTO = ToTerm("."),
                 SASIGNAR = ToTerm(":="),
                 //logicos reservadas
-                LAND = ToTerm("and"),
-                LOR = ToTerm("or"),
-                LNOT = ToTerm("not"),
+                LAND = ToTerm("AND"),
+                LOR = ToTerm("OR"),
+                LNOT = ToTerm("NOT"),
+
                 //tipos y valores Reservadas
                 VTRUE = ToTerm("true"),
                 VFALSE = ToTerm("false"),
@@ -89,8 +90,15 @@ namespace Proyecto1.Ejecutor.Analizador
                 REXIT = ToTerm("exit"),
                 RGRAFICAR = ToTerm("graficar_ts"),
                 RWRITE = ToTerm("write"),
-                RWRITELN = ToTerm("writeln")
-                ;
+                RWRITELN = ToTerm("writeln");
+
+            RegisterOperators(1, SCOMA);
+            RegisterOperators(2, SDIVISION,SMULTIPLICACION);
+            RegisterOperators(3, SMAS, SMENOS);
+
+            NonGrammarTerminals.Add(comentarioBloque1);
+            NonGrammarTerminals.Add(comentarioBloque2);
+            NonGrammarTerminals.Add(comentariolinea);
             #endregion
 
             #region No terimnales
@@ -189,7 +197,7 @@ namespace Proyecto1.Ejecutor.Analizador
             //-------
             Pprogram.Rule = RPROGRAM + ID + SPYCOMA;
             //-------
-            PDeclaracion.Rule = RCONST + ID + SIGUAL + Operacion_relacional + SPYCOMA
+            PDeclaracion.Rule = RCONST + Pids + SDOSPUNTOS + Tipo +  Declaraciones
                 | RVAR + Pids + SDOSPUNTOS + Tipo + Declaraciones
                 | Pids + SDOSPUNTOS + Tipo + Declaraciones
                 ;
@@ -255,7 +263,7 @@ namespace Proyecto1.Ejecutor.Analizador
 
             //----------------------------------------------
 
-            PInstruccionNativa.Rule = REXIT + SPARIZQ + SPARDER + SPYCOMA
+            PInstruccionNativa.Rule = REXIT + SPARIZQ  + Operacion  + SPARDER + SPYCOMA
                 | RGRAFICAR + SPARIZQ + SPARDER + SPYCOMA
                 | SentenciaWrite
                 | SentenciaWriteln;
@@ -289,16 +297,17 @@ namespace Proyecto1.Ejecutor.Analizador
             PAsignacion.Rule = ID + Asignacionaux
                             ;
 
-            Asignacionaux.Rule = SASIGNAR + Operacion_relacional + SPYCOMA
+            Asignacionaux.Rule = SASIGNAR + CallMetodo 
+                                | SASIGNAR + Operacion_relacional + SPYCOMA
                                 | SPUNTO + ID + SASIGNAR + Operacion_relacional + SPYCOMA
                                 ;
 
 
             //---------------------
-            SentenciaIf.Rule = RIF + Condicion + RTHEN + Sentencias
-                             | RIF + Condicion + RTHEN + Sentencias + RELSE + Sentencias
-                             | RIF + Condicion + RTHEN + Sentencias + else_if
-                             | RIF + Condicion + RTHEN + Sentencias + else_if + RELSE + Sentencias
+            SentenciaIf.Rule = RIF + Condicion + RTHEN + RBEGIN + Sentencias + REND + SPYCOMA
+                             | RIF + Condicion + RTHEN + RBEGIN + Sentencias + REND + SPYCOMA + RELSE + RBEGIN + Sentencias + REND + SPYCOMA
+                             | RIF + Condicion + RTHEN + RBEGIN + Sentencias + REND + SPYCOMA + else_if
+                             | RIF + Condicion + RTHEN + RBEGIN + Sentencias + REND + SPYCOMA + else_if + RELSE + RBEGIN + Sentencias + REND + SPYCOMA
                              ;
 
             Condicion.Rule = SPARIZQ + Operacion + SPARDER
@@ -306,10 +315,9 @@ namespace Proyecto1.Ejecutor.Analizador
 
             else_if.Rule = else_if + elif
                         | elif
-                        | Empty
                         ;
 
-            elif.Rule = RIF + SPARIZQ + Operacion + SPARDER + RTHEN + Sentencias;
+            elif.Rule = RELSE + RIF  + Condicion + RTHEN + RBEGIN + Sentencias + REND + SPYCOMA;
 
             //----------------
 
@@ -349,7 +357,9 @@ namespace Proyecto1.Ejecutor.Analizador
 
             //--------------------------------------
             CallMetodo.Rule = ID + SPARIZQ + SPARDER + SPYCOMA
-                | ID + SPARIZQ + Valores + SPARDER + SPYCOMA;
+                | ID + SPARIZQ + Valores + SPARDER + SPYCOMA
+                | ID + SPARIZQ + SPARDER 
+                | ID + SPARIZQ + Valores + SPARDER ; 
 
 
             //--------------------------------------
@@ -367,10 +377,10 @@ namespace Proyecto1.Ejecutor.Analizador
                 | Operacion_numerica + SIGUAL + Operacion_numerica
                 | Operacion_numerica;
             //--------
-            Operacion_numerica.Rule = Operacion_numerica + SMAS + Operacion_numerica
-                | Operacion_numerica + SMENOS + Operacion_numerica
-                | Operacion_numerica + SDIVISION + Operacion_numerica
+            Operacion_numerica.Rule = Operacion_numerica + SDIVISION + Operacion_numerica
                 | Operacion_numerica + SMULTIPLICACION + Operacion_numerica
+                | Operacion_numerica + SMAS + Operacion_numerica
+                | Operacion_numerica + SMENOS + Operacion_numerica
                 | Operacion_numerica + SMODULO + Operacion_numerica
                 | SMENOS + Operacion_numerica
                 | SPARIZQ + Operacion + SPARDER

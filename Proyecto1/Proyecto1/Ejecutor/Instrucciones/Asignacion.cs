@@ -10,7 +10,9 @@ namespace Proyecto1.Ejecutor.Instrucciones
     {
         string id;
         string objeto;
+        private Instruccion llamada;
         private Operacion valor;
+       
 
         public Asignacion(string id, Operacion valor)
         {
@@ -25,13 +27,27 @@ namespace Proyecto1.Ejecutor.Instrucciones
             this.valor = valor;
         }
 
+        public Asignacion(string id, Instruccion llamada)
+        {
+            this.id = id;
+            this.llamada = llamada;
+        }
+
         public string Id { get => id; set => id = value; }
         public string Objeto { get => objeto; set => objeto = value; }
         internal Operacion Valor { get => valor; set => valor = value; }
 
         public Object Ejecutar(TablaDeSimbolos tabla) {
-
-            tabla.setValor(id,valor.Ejecutar(tabla));
+            if (llamada != null)
+            {
+                Object nuevo = llamada.Ejecutar(tabla);
+                tabla.setValor(id, nuevo);
+            }
+            else
+            {
+                tabla.setValor(id, valor.Ejecutar(tabla));
+            }
+            
             return null;
         }
     }

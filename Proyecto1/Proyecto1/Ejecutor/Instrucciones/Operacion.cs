@@ -1,4 +1,5 @@
 ﻿using Proyecto1.Ejecutor.Analizador.Interfaces;
+using Proyecto1.Ejecutor.Instrucciones.Sentencias;
 using Proyecto1.Ejecutor.Modelos;
 using System;
 using System.Collections.Generic;
@@ -11,11 +12,19 @@ namespace Proyecto1.Ejecutor.Instrucciones
         private Tipo tipo_operacion;
         private Operacion operadorIzq;
         private Operacion operadorDer;
-        private Object valor;
+
         private string id_funciones;
         private LinkedList<Operacion> lst_atributos;
+        private Object valor;
+        private SentenciaLlamar llamada;
 
         public object Valor { get => valor; set => valor = value; }
+        public Tipo Tipo_operacion { get => tipo_operacion; set => tipo_operacion = value; }
+        internal Operacion OperadorIzq { get => operadorIzq; set => operadorIzq = value; }
+        internal Operacion OperadorDer { get => operadorDer; set => operadorDer = value; }
+        public object Valor1 { get => valor; set => valor = value; }
+        public string Id_funciones { get => id_funciones; set => id_funciones = value; }
+        internal LinkedList<Operacion> Lst_atributos { get => lst_atributos; set => lst_atributos = value; }
 
         public Operacion(Tipo tipo_operacion, Operacion operadorIzq)
         {
@@ -47,10 +56,11 @@ namespace Proyecto1.Ejecutor.Instrucciones
             this.tipo_operacion = tipo_operacion;
         }
 
-        public Operacion(string id_funciones, LinkedList<Operacion> lst_atributos)
+        public Operacion(string id_funciones, LinkedList<Operacion> lst_atributos, Tipo tipo)
         {
             this.id_funciones = id_funciones;
             this.lst_atributos = lst_atributos;
+            this.tipo_operacion = tipo;
         }
 
         public Operacion(string id_funciones)
@@ -58,24 +68,29 @@ namespace Proyecto1.Ejecutor.Instrucciones
             this.id_funciones = id_funciones;
         }
 
+        public Operacion(SentenciaLlamar llamada, Tipo tipo_operacion)
+        {
+            this.llamada = llamada;
+            this.tipo_operacion = tipo_operacion;
+        }
+
         public Object Ejecutar(TablaDeSimbolos tabla)
         {
-            if (tipo_operacion == Tipo.MAS)
+            if (tipo_operacion == Tipo.DIVISION)
             {
-
-                return (Double)operadorIzq.Ejecutar(tabla) + (Double)operadorDer.Ejecutar(tabla);
-            }
-            else if (tipo_operacion == Tipo.MENOS)
-            {
-                return (Double)operadorIzq.Ejecutar(tabla) - (Double)operadorDer.Ejecutar(tabla);
+                return (Double)operadorIzq.Ejecutar(tabla) / (Double)operadorDer.Ejecutar(tabla);
             }
             else if (tipo_operacion == Tipo.MULTIPLICACION)
             {
                 return (Double)operadorIzq.Ejecutar(tabla) * (Double)operadorDer.Ejecutar(tabla);
             }
-            else if (tipo_operacion == Tipo.DIVISION)
+            else if (tipo_operacion == Tipo.MAS)
             {
-                return (Double)operadorIzq.Ejecutar(tabla) / (Double)operadorDer.Ejecutar(tabla);
+                return (Double)operadorIzq.Ejecutar(tabla) + (Double)operadorDer.Ejecutar(tabla);
+            }
+            else if (tipo_operacion == Tipo.MENOS)
+            {
+                return (Double)operadorIzq.Ejecutar(tabla) - (Double)operadorDer.Ejecutar(tabla);
             }
             else if (tipo_operacion == Tipo.MODULO)
             {
@@ -107,6 +122,8 @@ namespace Proyecto1.Ejecutor.Instrucciones
             }
             else if (tipo_operacion == Tipo.AND)
             {
+
+                bool ver = ((bool)operadorIzq.Ejecutar(tabla)) && ((bool)operadorDer.Ejecutar(tabla));
                 return ((bool)operadorIzq.Ejecutar(tabla)) && ((bool)operadorDer.Ejecutar(tabla));
             }
             else if (tipo_operacion == Tipo.OR)
@@ -116,23 +133,22 @@ namespace Proyecto1.Ejecutor.Instrucciones
             else if (tipo_operacion == Tipo.INCREMENETO)
             {
                 Double aux;
-
                 aux = (Double)tabla.getValor(valor.ToString());
                 tabla.setValor(valor.ToString(), aux + 1);
                 return aux;
-
-
             }
             else if (tipo_operacion == Tipo.DECREMENTO)
             {
                 Double aux;
-
                 aux = (Double)tabla.getValor(valor.ToString());
                 tabla.setValor(valor.ToString(), aux - 1);
                 return aux;
-
             }
             else if (tipo_operacion == Tipo.ENTERO)
+            {
+                return Double.Parse(valor.ToString());
+            }
+            else if (tipo_operacion == Tipo.INTEGER)
             {
                 return Double.Parse(valor.ToString());
             }
@@ -155,6 +171,15 @@ namespace Proyecto1.Ejecutor.Instrucciones
             else if (tipo_operacion == Tipo.ID)
             {
                 return tabla.getValor(valor.ToString());
+            }
+            else if (tipo_operacion == Tipo.ID_FUNCION)
+            {
+                return tabla.getValor(id_funciones.ToString());
+            }
+            else if (tipo_operacion == Tipo.ID_FUNCIONVALORES)
+            {
+                object valor = llamada.Ejecutar(tabla);
+                return valor;
             }
             else
             {

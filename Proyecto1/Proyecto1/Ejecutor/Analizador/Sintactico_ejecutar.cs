@@ -77,6 +77,7 @@ namespace Proyecto1.Ejecutor.Analizador
                 }
             }
 
+
             return salida;
         }
         private LinkedList<Instruccion> Instrucciones(ParseTreeNode nodo)
@@ -124,6 +125,16 @@ namespace Proyecto1.Ejecutor.Analizador
         {
             if (nodo.ChildNodes.Count == 4)
             {
+                string porduccion = nodo.ChildNodes.ElementAt(2).Term.Name;
+                if (porduccion == "Valores")
+                {
+                    return new SentenciaLlamar(nodo.ChildNodes.ElementAt(0).Token.ValueString.ToString(), VALORES(nodo.ChildNodes.ElementAt(2)));
+                }
+                else { return new SentenciaLlamar(nodo.ChildNodes.ElementAt(0).Token.ValueString.ToString()); }
+
+            }
+            else if (nodo.ChildNodes.Count == 3)
+            {
                 return new SentenciaLlamar(nodo.ChildNodes.ElementAt(0).Token.ValueString.ToString());
             }
             else
@@ -140,7 +151,7 @@ namespace Proyecto1.Ejecutor.Analizador
                 case "graficar_ts":
                     return new GraficarTS();
                 case "exit":
-                    return new Instruccion_Exit();
+                    return new Instruccion_Exit(POPERACION(node.ChildNodes.ElementAt(2)));
                 case "SentenciaWrite":
                     return SENTENCIAWRITE(node.ChildNodes.ElementAt(0));
                 case "SentenciaWriteln":
@@ -150,6 +161,8 @@ namespace Proyecto1.Ejecutor.Analizador
             }
             return null;
         }
+
+
         private Instruccion SENTENCIAWRITE(ParseTreeNode nodo)
         {
             if (nodo.ChildNodes.Count == 7)
@@ -331,12 +344,12 @@ namespace Proyecto1.Ejecutor.Analizador
         {
             if (nodo.ChildNodes.Count == 2)
             {
-                return new Atributo(PIDS(nodo.ChildNodes.ElementAt(0)), PATRIBUTOS2(nodo.ChildNodes.ElementAt(1)));
+                return new Atributo(PIDS(nodo.ChildNodes.ElementAt(0)), Tipo.VALOR, PATRIBUTOS2(nodo.ChildNodes.ElementAt(1)));
 
             }
             else if (nodo.ChildNodes.Count == 3)
             {
-                return new Atributo(PIDS(nodo.ChildNodes.ElementAt(1)), PATRIBUTOS2(nodo.ChildNodes.ElementAt(2)));
+                return new Atributo(PIDS(nodo.ChildNodes.ElementAt(1)), Tipo.REFERENCIA, PATRIBUTOS2(nodo.ChildNodes.ElementAt(2)));
             }
 
             return null;
@@ -524,21 +537,21 @@ namespace Proyecto1.Ejecutor.Analizador
         }
         private Instruccion SENTENCIAIF(ParseTreeNode nodo)
         {
-            if (nodo.ChildNodes.Count == 4)
+            if (nodo.ChildNodes.Count == 7)
             {
-                return new Sentencia_IF(PCONDICION(nodo.ChildNodes.ElementAt(1)), SENTENCIAS(nodo.ChildNodes.ElementAt(3)));
+                return new Sentencia_IF(PCONDICION(nodo.ChildNodes.ElementAt(1)), SENTENCIAS(nodo.ChildNodes.ElementAt(4)));
             }
-            else if (nodo.ChildNodes.Count == 6)
+            else if (nodo.ChildNodes.Count == 12)
             {
-                return new Sentencia_IF(PCONDICION(nodo.ChildNodes.ElementAt(1)), SENTENCIAS(nodo.ChildNodes.ElementAt(3)), new tipo_else(SENTENCIAS(nodo.ChildNodes.ElementAt(5))));
-            }
-            else if (nodo.ChildNodes.Count == 5)
-            {
-                return new Sentencia_IF(PCONDICION(nodo.ChildNodes.ElementAt(1)), SENTENCIAS(nodo.ChildNodes.ElementAt(3)), ELSE_IF(nodo.ChildNodes.ElementAt(4)));
+                return new Sentencia_IF(PCONDICION(nodo.ChildNodes.ElementAt(1)), SENTENCIAS(nodo.ChildNodes.ElementAt(4)), new tipo_else(SENTENCIAS(nodo.ChildNodes.ElementAt(9))));
             }
             else if (nodo.ChildNodes.Count == 7)
             {
-                return new Sentencia_IF(PCONDICION(nodo.ChildNodes.ElementAt(1)), SENTENCIAS(nodo.ChildNodes.ElementAt(3)), new tipo_else(SENTENCIAS(nodo.ChildNodes.ElementAt(5))), ELSE_IF(nodo.ChildNodes.ElementAt(4)));
+                return new Sentencia_IF(PCONDICION(nodo.ChildNodes.ElementAt(1)), SENTENCIAS(nodo.ChildNodes.ElementAt(4)), ELSE_IF(nodo.ChildNodes.ElementAt(7)));
+            }
+            else if (nodo.ChildNodes.Count == 13)
+            {
+                return new Sentencia_IF(PCONDICION(nodo.ChildNodes.ElementAt(1)), SENTENCIAS(nodo.ChildNodes.ElementAt(4)), new tipo_else(SENTENCIAS(nodo.ChildNodes.ElementAt(10))), ELSE_IF(nodo.ChildNodes.ElementAt(7)));
             }
             return null;
         }
@@ -573,9 +586,9 @@ namespace Proyecto1.Ejecutor.Analizador
 
         private else_if ELIF(ParseTreeNode nodo)
         {
-            if (nodo.ChildNodes.Count == 6)
+            if (nodo.ChildNodes.Count == 8)
             {
-                return new else_if(POPERACION(nodo.ChildNodes.ElementAt(2)), SENTENCIAS(nodo.ChildNodes.ElementAt(5)));
+                return new else_if(PCONDICION(nodo.ChildNodes.ElementAt(2)), SENTENCIAS(nodo.ChildNodes.ElementAt(5)));
             }
             return null;
         }
@@ -594,6 +607,10 @@ namespace Proyecto1.Ejecutor.Analizador
             if (nodo.ChildNodes.Count == 3)
             {
                 return new Asignacion(id, OPERACION_RELACIONAL(nodo.ChildNodes.ElementAt(1)));
+            }
+            else if (nodo.ChildNodes.Count == 2)
+            {
+                return new Asignacion(id, LLAMARMETODO(nodo.ChildNodes.ElementAt(1)));
             }
             else
             {
@@ -634,7 +651,15 @@ namespace Proyecto1.Ejecutor.Analizador
                 }
                 else
                 {
-                    return new Asignacion(nodo.ChildNodes.ElementAt(1).Token.ValueString.ToString(), OPERACION_RELACIONAL(nodo.ChildNodes.ElementAt(3)));
+                    Tipo obtener = BuscarTipo(nodo.ChildNodes.ElementAt(3));
+                    string produccion = nodo.ChildNodes.ElementAt(1).Term.Name;
+                    string produccion_Declaraciones = nodo.ChildNodes.ElementAt(4).Term.Name;
+                    Operacion valor = null;
+                    if (produccion_Declaraciones == "Declaraciones")
+                    {
+                        valor = DECLARACIONES(nodo.ChildNodes.ElementAt(4));
+                    }
+                    return new Declaracion(PIDS(nodo.ChildNodes.ElementAt(1)), obtener, valor);
                 }
 
             }
@@ -693,29 +718,37 @@ namespace Proyecto1.Ejecutor.Analizador
         {
             if (nodo.ChildNodes.Count == 3)
             {
-                string operador = nodo.ChildNodes.ElementAt(1).Token.ValueString.ToString();
-                switch (operador)
+                string op = nodo.ChildNodes.ElementAt(1).Term.Name;
+                if (op != "Operacion" )
                 {
-                    case "+":
-                        return new Operacion(Tipo.MAS, OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(0)), OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(2)));
-                    case "-":
-                        return new Operacion(Tipo.MENOS, OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(0)), OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(2)));
-                    case "*":
-                        return new Operacion(Tipo.MULTIPLICACION, OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(0)), OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(2)));
-                    case "/":
-                        return new Operacion(Tipo.DIVISION, OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(0)), OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(2)));
-                    case "%":
-                        return new Operacion(Tipo.MODULO, OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(0)), OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(2)));
-                    default:
-                        string produccion = nodo.ChildNodes.ElementAt(1).Term.Name;
-                        if (produccion == "Operacion")
-                        {
-                            return POPERACION(nodo.ChildNodes.ElementAt(1));
-                        }
-                        else
-                        {
-                            return new Operacion(nodo.ChildNodes.ElementAt(0).Token.ValueString.ToString());
-                        }
+                    string operador = nodo.ChildNodes.ElementAt(1).Token.ValueString.ToString();
+                    switch (operador)
+                    {
+                        case "*":
+                            return new Operacion(Tipo.MULTIPLICACION, OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(0)), OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(2)));
+                        case "/":
+                            return new Operacion(Tipo.DIVISION, OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(0)), OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(2)));
+                        case "+":
+                            return new Operacion(Tipo.MAS, OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(0)), OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(2)));
+                        case "-":
+                            return new Operacion(Tipo.MENOS, OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(0)), OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(2)));
+                        case "%":
+                            return new Operacion(Tipo.MODULO, OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(0)), OPERACION_NUMERICA(nodo.ChildNodes.ElementAt(2)));
+                        default:
+                            return null;
+                    }
+                }
+                else
+                {
+                    string operador = nodo.ChildNodes.ElementAt(1).Term.Name;
+                    if (operador == "Operacion")
+                    {
+                        return POPERACION(nodo.ChildNodes.ElementAt(1));
+                    }
+                    else
+                    {
+                        return new Operacion(nodo.ChildNodes.ElementAt(0).Token.ValueString.ToString(), Tipo.ID_FUNCION);
+                    }
                 }
             }
             else if (nodo.ChildNodes.Count == 2)
@@ -724,7 +757,7 @@ namespace Proyecto1.Ejecutor.Analizador
             }
             else if (nodo.ChildNodes.Count == 4)
             {
-                return new Operacion(nodo.ChildNodes.ElementAt(0).Token.ValueString.ToString(), VALORES(nodo.ChildNodes.ElementAt(2)));
+                return new Operacion(new SentenciaLlamar(nodo.ChildNodes.ElementAt(0).Token.ValueString.ToString(), VALORES(nodo.ChildNodes.ElementAt(2))), Tipo.ID_FUNCIONVALORES);
             }
             else
             {
@@ -737,7 +770,7 @@ namespace Proyecto1.Ejecutor.Analizador
             if (nodo.ChildNodes.Count == 3)
             {
                 string operador = nodo.ChildNodes.ElementAt(1).Term.Name;
-                switch (operador)
+                switch (operador.ToLower())
                 {
                     case "and":
                         return new Operacion(Tipo.AND, POPERACION(nodo.ChildNodes.ElementAt(0)), POPERACION(nodo.ChildNodes.ElementAt(2)));

@@ -75,7 +75,8 @@ namespace Proyecto1.Ejecutor.Instrucciones.Sentencias
                 {
                     foreach (else_if instruccionelif in lst_elif)
                     {
-                        if ((bool)instruccionelif.Condicion.Ejecutar(tabla))
+                        bool ver = (bool)instruccionelif.Condicion.Ejecutar(tabla);
+                        if (ver)
                         {
                             foreach (Instruccion instruccion in instruccionelif.Lst_if)
                             {
@@ -100,7 +101,7 @@ namespace Proyecto1.Ejecutor.Instrucciones.Sentencias
                         }
                     }
                 }
-                if (sentencia_else.Lst_else.Count > 0 || sentencia_else.Lst_else != null)
+                if (sentencia_else != null)
                 {
                     foreach (Instruccion instruccion in sentencia_else.Lst_else)
                     {

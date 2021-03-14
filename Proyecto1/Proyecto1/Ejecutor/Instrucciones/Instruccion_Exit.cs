@@ -8,9 +8,17 @@ namespace Proyecto1.Ejecutor.Instrucciones
 {
     class Instruccion_Exit : Instruccion
     {
+        Operacion valor;
+
+        public Instruccion_Exit(Operacion valor)
+        {
+            this.valor = valor;
+        }
+
         public object Ejecutar(TablaDeSimbolos tabla)
         {
-            return null;
+        
+            return valor.Ejecutar(tabla);
         }
     }
 }

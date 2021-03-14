@@ -72,6 +72,11 @@ namespace Proyecto1.Ejecutor.Modelos
         NEGATIVO,
         INCREMENETO,
         DECREMENTO,
-        
+        FUNCION,
+        PROCEDIMIENTO,
+        VALOR,
+        REFERENCIA,
+        ID_FUNCION,
+        ID_FUNCIONVALORES
     }
 }
