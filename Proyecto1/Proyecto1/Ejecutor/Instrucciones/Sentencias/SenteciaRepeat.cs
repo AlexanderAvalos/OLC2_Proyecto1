@@ -19,6 +19,7 @@ namespace Proyecto1.Ejecutor.Instrucciones.Sentencias
 
         public object Ejecutar(TablaDeSimbolos tabla)
         {
+            bool ver = false;
             do
             {
                 TablaDeSimbolos local = new TablaDeSimbolos();
@@ -43,7 +44,8 @@ namespace Proyecto1.Ejecutor.Instrucciones.Sentencias
                         instruccion.Ejecutar(local);
                     }
                 }
-            } while ((bool)condicion.Ejecutar(tabla));
+                ver = (bool)condicion.Ejecutar(tabla);
+            } while (ver == false);
             return null;
         }
     }

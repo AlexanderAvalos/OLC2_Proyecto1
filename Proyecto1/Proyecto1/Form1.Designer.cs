@@ -87,7 +87,7 @@ namespace Proyecto1
             // 
             // Cargar
             // 
-            this.Cargar.Location = new System.Drawing.Point(428, 33);
+            this.Cargar.Location = new System.Drawing.Point(737, 33);
             this.Cargar.Name = "Cargar";
             this.Cargar.Size = new System.Drawing.Size(106, 35);
             this.Cargar.TabIndex = 5;
@@ -97,7 +97,7 @@ namespace Proyecto1
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(428, 74);
+            this.button2.Location = new System.Drawing.Point(737, 74);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(106, 35);
             this.button2.TabIndex = 6;
@@ -107,7 +107,7 @@ namespace Proyecto1
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(428, 115);
+            this.button3.Location = new System.Drawing.Point(737, 115);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(106, 35);
             this.button3.TabIndex = 7;
@@ -117,12 +117,13 @@ namespace Proyecto1
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(428, 156);
+            this.button5.Location = new System.Drawing.Point(737, 156);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(106, 35);
             this.button5.TabIndex = 9;
             this.button5.Text = "Reportes";
             this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // label3
             // 
@@ -361,7 +362,7 @@ namespace Proyecto1
             // 
             this.richTextBox1.Location = new System.Drawing.Point(62, 33);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(343, 349);
+            this.richTextBox1.Size = new System.Drawing.Size(669, 349);
             this.richTextBox1.TabIndex = 12;
             this.richTextBox1.Text = "";
             // 
@@ -385,7 +386,7 @@ namespace Proyecto1
             this.richTextBox2.ForeColor = System.Drawing.SystemColors.MenuHighlight;
             this.richTextBox2.Location = new System.Drawing.Point(62, 406);
             this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.Size = new System.Drawing.Size(472, 144);
+            this.richTextBox2.Size = new System.Drawing.Size(781, 144);
             this.richTextBox2.TabIndex = 14;
             this.richTextBox2.Text = "";
             // 
@@ -393,7 +394,7 @@ namespace Proyecto1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(555, 562);
+            this.ClientSize = new System.Drawing.Size(864, 562);
             this.Controls.Add(this.richTextBox2);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.richTextBox1);

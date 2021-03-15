@@ -140,7 +140,7 @@ namespace Proyecto1.Ejecutor.Instrucciones.Sentencias
                     {
                         continue;
                     }
-                    if (instruccion.GetType() == typeof(Instruccion_Exit))
+                    if (instruccion.GetType() == typeof(Instruccion_Exit) && resultado == null)
                     {
                         object val = instruccion.Ejecutar(actual_funcion.Local);
                         actual_funcion.Local.setValor(id, val);
@@ -153,6 +153,10 @@ namespace Proyecto1.Ejecutor.Instrucciones.Sentencias
                     else
                     {
                         resultado = instruccion.Ejecutar(actual_funcion.Local);
+                    }
+                    if (resultado != null)
+                    {
+                        return resultado;
                     }
                 }
                 for (int i = 0; i < actual_funcion.Lst_atributos.Count; i++)

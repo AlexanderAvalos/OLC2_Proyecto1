@@ -28,7 +28,8 @@ namespace Proyecto1.Ejecutor.Instrucciones.Sentencias
             inicializacion.Ejecutar(tabla);
             Simbolo nuevo = new Simbolo(tabla.getTipo(inicializacion.Id.ToString()), inicializacion.Id.ToString());
             Operacion valor = (Operacion)inicializacion.Valor;
-
+            object bre = null;
+            object con = null;
             try
             {
                 nuevo.Valor = valor.Ejecutar(tabla);
@@ -58,11 +59,11 @@ namespace Proyecto1.Ejecutor.Instrucciones.Sentencias
                 {
                     foreach (Instruccion instruccion in lst_Sentencias)
                     {
-                        if (instruccion.GetType() == typeof(SentenciasBreak))
+                        if (instruccion.GetType() == typeof(SentenciasBreak) || (string)bre == "Break")
                         {
                             return null;
                         }
-                        if (instruccion.GetType() == typeof(SentenciasContinue))
+                        if (instruccion.GetType() == typeof(SentenciasContinue) || (string)bre == "Continue")
                         {
                             continue;
                         }
@@ -72,7 +73,7 @@ namespace Proyecto1.Ejecutor.Instrucciones.Sentencias
                         }
                         else
                         {
-                            instruccion.Ejecutar(local);
+                            bre = instruccion.Ejecutar(local);
                         }
                     }
                     actualizar.Ejecutar(local);

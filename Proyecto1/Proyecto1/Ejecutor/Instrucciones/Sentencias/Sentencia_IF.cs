@@ -46,17 +46,22 @@ namespace Proyecto1.Ejecutor.Instrucciones.Sentencias
         {
             TablaDeSimbolos ts_local = new TablaDeSimbolos();
             ts_local.agregarPadre(tabla);
-            if ((bool)condicion.Ejecutar(tabla))
+            bool verificar = Convert.ToBoolean(condicion.Ejecutar(tabla));
+            if (verificar)
             {
                 foreach (Instruccion instruccion in lst_sentencias_if)
                 {
                     if (instruccion.GetType() == typeof(SentenciasBreak))
                     {
-                        break;
+                        return "Break";
                     }
                     if (instruccion.GetType() == typeof(SentenciasContinue))
                     {
-                        continue;
+                        return "Continue";
+                    }
+                    if (instruccion.GetType() == typeof(Instruccion_Exit))
+                    {
+                        return 0;
                     }
                     if (instruccion.GetType() == typeof(Instruccion_Funcion) || instruccion.GetType() == typeof(Instruccion_Procedimiento) || instruccion.GetType() == typeof(Instruccion_Exit) || instruccion.GetType() == typeof(Declaracion))
                     {
@@ -82,11 +87,15 @@ namespace Proyecto1.Ejecutor.Instrucciones.Sentencias
                             {
                                 if (instruccion.GetType() == typeof(SentenciasBreak))
                                 {
-                                    break;
+                                    return "Break";
                                 }
                                 if (instruccion.GetType() == typeof(SentenciasContinue))
                                 {
-                                    continue;
+                                    return "Continue";
+                                }
+                                if (instruccion.GetType() == typeof(Instruccion_Exit))
+                                {
+                                    return instruccion.Ejecutar(ts_local);
                                 }
                                 if (instruccion.GetType() == typeof(Instruccion_Funcion) || instruccion.GetType() == typeof(Instruccion_Procedimiento) || instruccion.GetType() == typeof(Instruccion_Exit) || instruccion.GetType() == typeof(Declaracion))
                                 {
@@ -107,11 +116,15 @@ namespace Proyecto1.Ejecutor.Instrucciones.Sentencias
                     {
                         if (instruccion.GetType() == typeof(SentenciasBreak))
                         {
-                            break;
+                            return "Break";
                         }
                         if (instruccion.GetType() == typeof(SentenciasContinue))
                         {
-                            continue;
+                            return "Continue";
+                        }
+                        if (instruccion.GetType() == typeof(Instruccion_Exit))
+                        {
+                            return instruccion.Ejecutar(ts_local);
                         }
                         if (instruccion.GetType() == typeof(Instruccion_Funcion) || instruccion.GetType() == typeof(Instruccion_Procedimiento) || instruccion.GetType() == typeof(Instruccion_Exit) || instruccion.GetType() == typeof(Declaracion))
                         {

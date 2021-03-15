@@ -10,6 +10,8 @@ namespace Proyecto1.Ejecutor.Instrucciones
     {
         public object Ejecutar(TablaDeSimbolos tabla)
         {
+            Graficar gra = new Graficar();
+            gra.HTML_ts(tabla);
             return null;
         }
     }

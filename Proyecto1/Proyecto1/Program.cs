@@ -1,3 +1,4 @@
+using Irony.Parsing;
 using Proyecto1.Ejecutor.Analizador.Interfaces;
 using Proyecto1.Ejecutor.Modelos;
 using System;
@@ -28,6 +29,7 @@ namespace Proyecto1
         public static LinkedList<Lista_Funciones> lista_FTemporal = new LinkedList<Lista_Funciones>();
         public static LinkedList<ListaProcedimientos> lista_PTemporal = new LinkedList<ListaProcedimientos>();
         public static object retorno = " ";
+        public static TablaDeSimbolos tablageneral = new TablaDeSimbolos();
         public static Tipo getTipo(string name)
         {
             Tipo tipo = Tipo.OBJECT;

@@ -149,10 +149,9 @@ namespace Proyecto1.Ejecutor.Modelos
                     {
                         s.Valor = Convert.ToDouble(valor);
                     }
-                    else if (s.Tipo == Tipo.DECIMAL)
+                    else if (s.Tipo == Tipo.REAL)
                     {
-                        s.Valor = Convert.ToDouble(valor);
-
+                        s.Valor = Convert.ToDecimal(valor);
                     }
                     else if (s.Tipo == Tipo.CADENA)
                     {

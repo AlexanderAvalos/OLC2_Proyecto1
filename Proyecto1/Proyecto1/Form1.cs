@@ -1,4 +1,6 @@
-﻿using Proyecto1.Ejecutor.Analizador;
+﻿using Irony.Parsing;
+using Proyecto1.Ejecutor.Analizador;
+using Proyecto1.Ejecutor.Modelos;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,7 +21,7 @@ namespace Proyecto1
     {
         int caracter;
         int caracter2;
-
+        ParseTreeNode grafi = null;
         List<string> salida = new List<string>();
      
         public Form1()
@@ -51,6 +53,9 @@ namespace Proyecto1
             Sintactico_ejecutar sintactico = new Sintactico_ejecutar();
             string entrada = richTextBox1.Text.Trim();
             sintactico.Analizar(entrada, new Gramatica_Ejecutar());
+            grafi = sintactico.nodoglobal;
+            salida = sintactico.salida;
+
         }
 
         private void Abrir()
@@ -144,13 +149,25 @@ namespace Proyecto1
                     e.Graphics.DrawString(conv, richTextBox2.Font, Brushes.Blue, pictureBox2.Width - (e.Graphics.MeasureString((conv), richTextBox2.Font).Width + 10), altura);
                     caracter2 += richTextBox2.Lines[i].Length + 1;
                     altura = richTextBox2.GetPositionFromCharIndex(caracter2).Y;
-
+                   
                 }
             }
             else
             {
                 e.Graphics.DrawString("1", richTextBox2.Font, Brushes.Blue, pictureBox2.Width - (e.Graphics.MeasureString("1", richTextBox2.Font).Width + 10), altura);
             }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            Sintactico_ejecutar sin = new Sintactico_ejecutar();
+            sin.graficar_TS(grafi);
+            Graficar grap = new Graficar();
+            foreach (var item in salida)
+            {
+                richTextBox2.AppendText(item);
+            }
+            grap.HTML_ts(Program.tablageneral);
         }
     }
 }

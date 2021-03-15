@@ -51,17 +51,17 @@ namespace Proyecto1.Ejecutor.Instrucciones
                 }
             }
             LinkedList<AtributosFP> aux = new LinkedList<AtributosFP>();
-
-            foreach (var item in lst_atributos)
-            {
-                foreach (var item2 in item.Lst_id)
+            if (lst_atributos != null) {
+                foreach (var item in lst_atributos)
                 {
-                    AtributosFP nuevo = new AtributosFP(item2, item.Tipodato, item.Tipo);
-                    aux.AddLast(nuevo);
+                    foreach (var item2 in item.Lst_id)
+                    {
+                        AtributosFP nuevo = new AtributosFP(item2, item.Tipodato, item.Tipo);
+                        aux.AddLast(nuevo);
+                    }
                 }
-            }
-           
 
+            }
             Lista_Funciones funciones = new Lista_Funciones(id_funcion, Tipo.FUNCION , local, aux, lst_instrucciones);
             Program.lista_FTemporal.AddLast(funciones);
             return null;

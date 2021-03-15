@@ -78,47 +78,50 @@ namespace Proyecto1.Ejecutor.Instrucciones
         {
             if (tipo_operacion == Tipo.DIVISION)
             {
-                return (Double)operadorIzq.Ejecutar(tabla) / (Double)operadorDer.Ejecutar(tabla);
+                return Convert.ToDecimal(operadorIzq.Ejecutar(tabla)) / Convert.ToDecimal(operadorDer.Ejecutar(tabla));
             }
             else if (tipo_operacion == Tipo.MULTIPLICACION)
             {
-                return (Double)operadorIzq.Ejecutar(tabla) * (Double)operadorDer.Ejecutar(tabla);
+                return Convert.ToDecimal(operadorIzq.Ejecutar(tabla)) * Convert.ToDecimal(operadorDer.Ejecutar(tabla));
             }
             else if (tipo_operacion == Tipo.MAS)
             {
-                return (Double)operadorIzq.Ejecutar(tabla) + (Double)operadorDer.Ejecutar(tabla);
+                return Convert.ToDecimal(operadorIzq.Ejecutar(tabla)) + Convert.ToDecimal(operadorDer.Ejecutar(tabla));
             }
             else if (tipo_operacion == Tipo.MENOS)
             {
-                return (Double)operadorIzq.Ejecutar(tabla) - (Double)operadorDer.Ejecutar(tabla);
+                return Convert.ToDecimal(operadorIzq.Ejecutar(tabla)) - Convert.ToDecimal(operadorDer.Ejecutar(tabla));
             }
             else if (tipo_operacion == Tipo.MODULO)
             {
-                return (Double)operadorIzq.Ejecutar(tabla) % (Double)operadorDer.Ejecutar(tabla);
+                return Convert.ToDecimal(operadorIzq.Ejecutar(tabla)) % Convert.ToDecimal(operadorDer.Ejecutar(tabla));
             }
             else if (tipo_operacion == Tipo.MAYOR)
             {
-                return (Double)operadorIzq.Ejecutar(tabla) > (Double)operadorDer.Ejecutar(tabla);
+                return Convert.ToDouble(operadorIzq.Ejecutar(tabla)) > Convert.ToDouble(operadorDer.Ejecutar(tabla));
             }
             else if (tipo_operacion == Tipo.MENOR)
             {
-                return (Double)operadorIzq.Ejecutar(tabla) < (Double)operadorDer.Ejecutar(tabla);
+                return Convert.ToDouble(operadorIzq.Ejecutar(tabla)) < Convert.ToDouble(operadorDer.Ejecutar(tabla));
+            }
+            else if (tipo_operacion == Tipo.NEGATIVO) {
+                return (Double)OperadorIzq.Ejecutar(tabla) * (-1);
             }
             else if (tipo_operacion == Tipo.MAYORIGUAL)
             {
-                return (Double)operadorIzq.Ejecutar(tabla) >= (Double)operadorDer.Ejecutar(tabla);
+                return Convert.ToDouble(operadorIzq.Ejecutar(tabla)) >= Convert.ToDouble(operadorDer.Ejecutar(tabla));
             }
             else if (tipo_operacion == Tipo.MENORIGUAL)
             {
-                return (Double)operadorIzq.Ejecutar(tabla) <= (Double)operadorDer.Ejecutar(tabla);
+                return Convert.ToDouble(operadorIzq.Ejecutar(tabla)) <= Convert.ToDouble(operadorDer.Ejecutar(tabla));
             }
             else if (tipo_operacion == Tipo.DIFERENTE)
             {
-                return (Double)operadorIzq.Ejecutar(tabla) != (Double)operadorDer.Ejecutar(tabla);
+                return Convert.ToDouble(operadorIzq.Ejecutar(tabla)) != Convert.ToDouble(operadorDer.Ejecutar(tabla));
             }
             else if (tipo_operacion == Tipo.IGUAL)
             {
-                return ((Double)operadorIzq.Ejecutar(tabla) == (Double)operadorDer.Ejecutar(tabla));
+                return Convert.ToDecimal(operadorIzq.Ejecutar(tabla)) == Convert.ToDecimal(operadorDer.Ejecutar(tabla));
             }
             else if (tipo_operacion == Tipo.AND)
             {
@@ -129,6 +132,10 @@ namespace Proyecto1.Ejecutor.Instrucciones
             else if (tipo_operacion == Tipo.OR)
             {
                 return ((bool)operadorIzq.Ejecutar(tabla)) || ((bool)operadorDer.Ejecutar(tabla));
+            }
+            else if (tipo_operacion == Tipo.NOT)
+            {
+                return !(bool)operadorIzq.Ejecutar(tabla);
             }
             else if (tipo_operacion == Tipo.INCREMENETO)
             {
@@ -156,6 +163,10 @@ namespace Proyecto1.Ejecutor.Instrucciones
             {
                 return Double.Parse(valor.ToString());
             }
+            else if (tipo_operacion == Tipo.REAL)
+            {
+                return Double.Parse(valor.ToString());
+            }
             else if (tipo_operacion == Tipo.FALSE)
             {
                 return Convert.ToBoolean(valor);
@@ -174,7 +185,8 @@ namespace Proyecto1.Ejecutor.Instrucciones
             }
             else if (tipo_operacion == Tipo.ID_FUNCION)
             {
-                return tabla.getValor(id_funciones.ToString());
+                object valor = llamada.Ejecutar(tabla);
+                return valor;
             }
             else if (tipo_operacion == Tipo.ID_FUNCIONVALORES)
             {

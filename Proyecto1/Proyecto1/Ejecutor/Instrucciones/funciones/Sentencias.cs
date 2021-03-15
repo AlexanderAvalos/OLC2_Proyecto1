@@ -18,7 +18,7 @@ namespace Proyecto1.Ejecutor.Instrucciones.funciones
 
         public object Ejecutar(TablaDeSimbolos tabla)
         {
-
+            object resultado = null;
             TablaDeSimbolos local = new TablaDeSimbolos();
             local.agregarPadre(tabla);
             foreach (var instruccion in lst_sentenciasfuncion)
@@ -42,11 +42,14 @@ namespace Proyecto1.Ejecutor.Instrucciones.funciones
                 }
                 else
                 {
-                    instruccion.Ejecutar(local);
+                     resultado =  instruccion.Ejecutar(local);
+                }
+                if (resultado != null) {
+                    break;
                 }
             }
 
-            return null;
+            return resultado;
         }
     }
 }

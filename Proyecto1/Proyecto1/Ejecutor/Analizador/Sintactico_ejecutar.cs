@@ -19,18 +19,18 @@ namespace Proyecto1.Ejecutor.Analizador
     {
         public List<string> salida = new List<string>();
         private int indice_nodo = 0;
-
+        public ParseTreeNode nodoglobal = null;
         public ParseTreeNode Analizar(string entrada, Grammar gramatica)
         {
             LanguageData lenguaje = new LanguageData(gramatica);
             Parser parser = new Parser(lenguaje);
             ParseTree arbol = parser.Parse(entrada);
             ParseTreeNode raiz = arbol.Root;
-
+            nodoglobal = raiz;
             if (raiz != null && arbol.ParserMessages.Count == 0)
             {
                 LinkedList<Instruccion> arbol_AST = Instrucciones(raiz.ChildNodes.ElementAt(0));
-                graficar_TS(raiz);
+                //graficar_TS(raiz);
                 if (arbol_AST != null)
                 {
                     Ejecutar(arbol_AST);
@@ -52,8 +52,9 @@ namespace Proyecto1.Ejecutor.Analizador
                 TablaDeSimbolos global = new TablaDeSimbolos();
                 foreach (Instruccion inst in AST)
                 {
-                    inst.Ejecutar(global);
+                    inst.Ejecutar(global); 
                 }
+                Program.tablageneral = global;
             }
             else
             {
@@ -481,9 +482,9 @@ namespace Proyecto1.Ejecutor.Analizador
             {
                 return new Sentencia_Case(POPERACION(nodo.ChildNodes.ElementAt(2)), PCASOS(nodo.ChildNodes.ElementAt(5)));
             }
-            else if (nodo.ChildNodes.Count == 10)
+            else if (nodo.ChildNodes.Count == 13)
             {
-                return new Sentencia_Case(POPERACION(nodo.ChildNodes.ElementAt(2)), PCASOS(nodo.ChildNodes.ElementAt(5)), new tipo_else(SENTENCIAS(nodo.ChildNodes.ElementAt(7))));
+                return new Sentencia_Case(POPERACION(nodo.ChildNodes.ElementAt(2)), PCASOS(nodo.ChildNodes.ElementAt(5)), new tipo_else(SENTENCIAS(nodo.ChildNodes.ElementAt(8))));
             }
             return null;
         }
@@ -545,7 +546,7 @@ namespace Proyecto1.Ejecutor.Analizador
             {
                 return new Sentencia_IF(PCONDICION(nodo.ChildNodes.ElementAt(1)), SENTENCIAS(nodo.ChildNodes.ElementAt(4)), new tipo_else(SENTENCIAS(nodo.ChildNodes.ElementAt(9))));
             }
-            else if (nodo.ChildNodes.Count == 7)
+            else if (nodo.ChildNodes.Count == 8)
             {
                 return new Sentencia_IF(PCONDICION(nodo.ChildNodes.ElementAt(1)), SENTENCIAS(nodo.ChildNodes.ElementAt(4)), ELSE_IF(nodo.ChildNodes.ElementAt(7)));
             }
@@ -719,7 +720,7 @@ namespace Proyecto1.Ejecutor.Analizador
             if (nodo.ChildNodes.Count == 3)
             {
                 string op = nodo.ChildNodes.ElementAt(1).Term.Name;
-                if (op != "Operacion" )
+                if (op != "Operacion" && nodo.ChildNodes.ElementAt(0).Term.Name.ToLower() != "id")
                 {
                     string operador = nodo.ChildNodes.ElementAt(1).Token.ValueString.ToString();
                     switch (operador)
@@ -747,7 +748,7 @@ namespace Proyecto1.Ejecutor.Analizador
                     }
                     else
                     {
-                        return new Operacion(nodo.ChildNodes.ElementAt(0).Token.ValueString.ToString(), Tipo.ID_FUNCION);
+                        return new Operacion(new SentenciaLlamar(nodo.ChildNodes.ElementAt(0).Token.ValueString.ToString()), Tipo.ID_FUNCION);
                     }
                 }
             }
@@ -776,11 +777,17 @@ namespace Proyecto1.Ejecutor.Analizador
                         return new Operacion(Tipo.AND, POPERACION(nodo.ChildNodes.ElementAt(0)), POPERACION(nodo.ChildNodes.ElementAt(2)));
                     case "or":
                         return new Operacion(Tipo.OR, POPERACION(nodo.ChildNodes.ElementAt(0)), POPERACION(nodo.ChildNodes.ElementAt(2)));
-                    case "not":
-                        return new Operacion(Tipo.NOT, POPERACION(nodo.ChildNodes.ElementAt(0)), POPERACION(nodo.ChildNodes.ElementAt(2)));
                 }
+                return null;
             }
-            return OPERACION_RELACIONAL(nodo.ChildNodes.ElementAt(0));
+            else if (nodo.ChildNodes.Count == 2)
+            {
+                return new Operacion(Tipo.NOT, POPERACION(nodo.ChildNodes.ElementAt(1)));
+            }
+            else
+            {
+                return OPERACION_RELACIONAL(nodo.ChildNodes.ElementAt(0));
+            }
         }
 
         private Operacion PVALOR(ParseTreeNode nodo)

@@ -92,9 +92,11 @@ namespace Proyecto1.Ejecutor.Analizador
                 RWRITE = ToTerm("write"),
                 RWRITELN = ToTerm("writeln");
 
-            RegisterOperators(1, SCOMA);
-            RegisterOperators(2, SDIVISION,SMULTIPLICACION);
-            RegisterOperators(3, SMAS, SMENOS);
+            RegisterOperators(1, SIGUAL,SDIFERENTE,SMAYOR,SMAYORIGUAL, SMENOR, SMENORIGUAL);
+            RegisterOperators(2, SMAS, SMENOS, LOR);
+            RegisterOperators(3, SMULTIPLICACION, SDIVISION, SMODULO, LAND);
+            RegisterOperators(4, LNOT);
+
 
             NonGrammarTerminals.Add(comentarioBloque1);
             NonGrammarTerminals.Add(comentarioBloque2);
@@ -175,7 +177,8 @@ namespace Proyecto1.Ejecutor.Analizador
                 PProcedures = new NonTerminal("PProcedures"),
                 //nativas
                 PInstruccionNativa = new NonTerminal("PInstruccionNativa"),
-                Concatenar = new NonTerminal("Concatenar");
+                Concatenar = new NonTerminal("Concatenar"),
+                bloqueif = new NonTerminal("Bloqueif"); ;
             ;
             #endregion
 
@@ -197,7 +200,7 @@ namespace Proyecto1.Ejecutor.Analizador
             //-------
             Pprogram.Rule = RPROGRAM + ID + SPYCOMA;
             //-------
-            PDeclaracion.Rule = RCONST + Pids + SDOSPUNTOS + Tipo +  Declaraciones
+            PDeclaracion.Rule = RCONST + Pids + SDOSPUNTOS + Tipo + Declaraciones
                 | RVAR + Pids + SDOSPUNTOS + Tipo + Declaraciones
                 | Pids + SDOSPUNTOS + Tipo + Declaraciones
                 ;
@@ -263,7 +266,7 @@ namespace Proyecto1.Ejecutor.Analizador
 
             //----------------------------------------------
 
-            PInstruccionNativa.Rule = REXIT + SPARIZQ  + Operacion  + SPARDER + SPYCOMA
+            PInstruccionNativa.Rule = REXIT + SPARIZQ + Operacion + SPARDER + SPYCOMA
                 | RGRAFICAR + SPARIZQ + SPARDER + SPYCOMA
                 | SentenciaWrite
                 | SentenciaWriteln;
@@ -297,8 +300,7 @@ namespace Proyecto1.Ejecutor.Analizador
             PAsignacion.Rule = ID + Asignacionaux
                             ;
 
-            Asignacionaux.Rule = SASIGNAR + CallMetodo 
-                                | SASIGNAR + Operacion_relacional + SPYCOMA
+            Asignacionaux.Rule = SASIGNAR + Operacion_relacional + SPYCOMA
                                 | SPUNTO + ID + SASIGNAR + Operacion_relacional + SPYCOMA
                                 ;
 
@@ -317,12 +319,12 @@ namespace Proyecto1.Ejecutor.Analizador
                         | elif
                         ;
 
-            elif.Rule = RELSE + RIF  + Condicion + RTHEN + RBEGIN + Sentencias + REND + SPYCOMA;
+            elif.Rule = RELSE + RIF + Condicion + RTHEN + RBEGIN + Sentencias + REND + SPYCOMA;
 
             //----------------
 
             SentenciaSwitch.Rule = RCASE + SPARIZQ + Operacion + SPARDER + ROF + Pcasos + REND + SPYCOMA
-                | RCASE + SPARIZQ + Operacion + SPARDER + ROF + Pcasos + RELSE + Sentencias + REND + SPYCOMA;
+                | RCASE + SPARIZQ + Operacion + SPARDER + ROF + Pcasos + RELSE + RBEGIN + Sentencias + REND + SPYCOMA + REND + SPYCOMA;
 
             Pcasos.Rule = Pcasos + Pcaso
                         | Pcaso;
@@ -358,14 +360,15 @@ namespace Proyecto1.Ejecutor.Analizador
             //--------------------------------------
             CallMetodo.Rule = ID + SPARIZQ + SPARDER + SPYCOMA
                 | ID + SPARIZQ + Valores + SPARDER + SPYCOMA
-                | ID + SPARIZQ + SPARDER 
-                | ID + SPARIZQ + Valores + SPARDER ; 
+                | ID + SPARIZQ + SPARDER
+                | ID + SPARIZQ + Valores + SPARDER;
 
 
             //--------------------------------------
 
             Operacion.Rule = Operacion + LAND + Operacion
                 | Operacion + LOR + Operacion
+                | LNOT + Operacion
                 | Operacion_relacional;
 
             //------------
