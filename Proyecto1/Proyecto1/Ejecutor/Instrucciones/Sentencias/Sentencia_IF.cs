@@ -61,7 +61,7 @@ namespace Proyecto1.Ejecutor.Instrucciones.Sentencias
                     }
                     if (instruccion.GetType() == typeof(Instruccion_Exit))
                     {
-                        return 0;
+                        return instruccion.Ejecutar(ts_local);
                     }
                     if (instruccion.GetType() == typeof(Instruccion_Funcion) || instruccion.GetType() == typeof(Instruccion_Procedimiento) || instruccion.GetType() == typeof(Instruccion_Exit) || instruccion.GetType() == typeof(Declaracion))
                     {
