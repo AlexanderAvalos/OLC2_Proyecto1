@@ -46,11 +46,11 @@ namespace Proyecto1.Ejecutor.Instrucciones.Sentencias
                             {
                                 if (instrucciones.GetType() == typeof(SentenciasBreak))
                                 {
-                                    break;
+                                    return "Break";
                                 }
                                 if (instrucciones.GetType() == typeof(SentenciasContinue))
                                 {
-                                    continue;
+                                    return "Continue";
                                 }
                                 if (instrucciones.GetType() == typeof(Instruccion_Exit))
                                 {
@@ -72,11 +72,11 @@ namespace Proyecto1.Ejecutor.Instrucciones.Sentencias
 
                             if (casos.Sentencia_unica.GetType() == typeof(SentenciasBreak))
                             {
-                                break;
+                                return "Break";
                             }
                             if (casos.Sentencia_unica.GetType() == typeof(SentenciasContinue))
                             {
-                                continue;
+                                return "Continue";
                             }
                             if (casos.Sentencia_unica.GetType() == typeof(Instruccion_Exit))
                             {
@@ -106,11 +106,11 @@ namespace Proyecto1.Ejecutor.Instrucciones.Sentencias
                 {
                     if (instrucciones.GetType() == typeof(SentenciasBreak))
                     {
-                        break;
+                        return "Break";
                     }
                     if (instrucciones.GetType() == typeof(SentenciasContinue))
                     {
-                        continue;
+                        return "Continue";
 
                     }
                     if (instrucciones.GetType() == typeof(Instruccion_Exit))
